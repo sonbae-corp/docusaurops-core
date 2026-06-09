@@ -78,6 +78,8 @@ Login-Azure -Manual:$Manual
 
 try {
 
+    $gatewayIpDomain = $null
+
     $templateTemplateFilePath = Join-Path -Path $PSScriptRoot -ChildPath "./templates/site/add-site.bicep"
 
     # Add current user
@@ -177,6 +179,34 @@ try {
         
         # Get the Application Gateway
         $gw = Get-AzApplicationGateway -ResourceGroupName $rgName -Name $gwName
+
+        # Resolve gateway host for downstream jobs: prefer private IP, else public IP DNS domain
+        $privateFrontendIp = $gw.FrontendIpConfigurations |
+            Where-Object { -not [string]::IsNullOrWhiteSpace($_.PrivateIpAddress) } |
+            Select-Object -First 1
+
+        if ($privateFrontendIp) {
+            $gatewayIpDomain = $privateFrontendIp.PrivateIpAddress
+            Write-Verbose "Gateway private IP detected: $gatewayIpDomain"
+        } else {
+            $publicIpRef = $gw.FrontendIpConfigurations |
+                Where-Object { $null -ne $_.PublicIPAddress -and -not [string]::IsNullOrWhiteSpace($_.PublicIPAddress.Id) } |
+                Select-Object -First 1
+
+            if ($publicIpRef) {
+                $publicIpName = Split-Path -Path $publicIpRef.PublicIPAddress.Id -Leaf
+                $publicIp = Get-AzPublicIpAddress -ResourceGroupName $rgName -Name $publicIpName
+                $gatewayIpDomain = $publicIp.DnsSettings.Fqdn
+
+                if (-not [string]::IsNullOrWhiteSpace($gatewayIpDomain)) {
+                    Write-Verbose "Gateway public IP DNS detected: $gatewayIpDomain"
+                } else {
+                    Write-Warning "Public IP '$publicIpName' has no DNS domain configured."
+                }
+            } else {
+                Write-Warning "No public IP reference found on Application Gateway frontend IP configurations."
+            }
+        }
         
         # Check existing resources once
         $existingPool = $gw.BackendAddressPools | Where-Object Name -eq $AppPath
@@ -258,6 +288,13 @@ try {
     if ($Env -eq 'CI') {
         $env:ENV_AZURE_DEPLOY_WEBAPP_NAME = $res.outputs.siteResourceName.Value
         Write-Verbose "Output variable 'ENV_AZURE_DEPLOY_WEBAPP_NAME=https://$($res.outputs.siteResourceName.Value)' for subsequent stages.."
+
+        if (-not [string]::IsNullOrWhiteSpace($gatewayIpDomain)) {
+            $env:ENV_AZURE_DOCUSAUROPS_SITE_URL = "https://$gatewayIpDomain"
+            Write-Verbose "Output variable 'ENV_AZURE_DOCUSAUROPS_SITE_URL=$($env:ENV_AZURE_DOCUSAUROPS_SITE_URL)' for subsequent stages.."
+        } else {
+            Write-Warning "ENV_AZURE_DOCUSAUROPS_SITE_URL was not set because no gateway IP domain could be resolved."
+        }
     }
 
 } catch {

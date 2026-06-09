@@ -176,25 +176,37 @@ Variables:
 
 Secrets:
 
+| Secret name | Description | Example |
+|---|---|---|
 | `ENV_AZURE_DOCUSAUROPS_CERT_BASE64_PFX` | Base64-encoded PFX certificate data for the Application Gateway SSL certificate. This should be the output from the certificate generation step. Store this securely as GitHub secert and never commit a real value. | `<base64-encoded-pfx-certificate>` |
 | `ENV_AZURE_DOCUSAUROPS_CERT_PASSWORD` | Password protecting the exported PFX certificate used by the gateway. Store this securely and never commit a real value. | `<certificate-password>` |
-
 
 - Test deployment
 
 In the GitHub repository, go to Actions and run the `Deploy DocusaurOps Core Infrastructure` workflow of the main branch. 
-This will deploy the core infrastructure in Azure. 
+This will deploy the core infrastructure in Azure and the root site
 
     <div className="flex justify-center mb-10">
         <img className="w-[50%]" src={GhRunCoreWorkflow}/>
     </div>
-
 
 You can monitor the deployment progress in GitHub Actions and/or in the Azure Portal. The Azur edeployment is done via subcription deployment stack.
 
 :::info
 In production scenario, workflow trigger should be done on push to branches, loading corresponding environment variables.
 :::
+
+When the deployment is done, you need to add a new variable `ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME` in the core repository. This variable corresponds to the web application name of the root site and used by the deploy site script to update the app settings for the sitemap:
+
+| Variable name | Description | Example |
+|---|---|---|
+| `ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME` | The name of the root web application deployed in Azure. This is used to update the sitemap configuration with the correct URL of the root site. | `app-docusaurops-root-qlrnl` |
+
+
+
+4. Test the documentation setup from a consumer repository
+
+
 
 4. Create a new "Enterprise Websites" Copilot connector.
 

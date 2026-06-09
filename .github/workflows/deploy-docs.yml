@@ -24,6 +24,7 @@ on:
           - rollback
         default: 'deploy'
 
+  # Uncomment this part to trigger a new deployment when documentation is updated.
   # push:
   #   paths:
   #     - 'documentation/**'
@@ -34,7 +35,6 @@ jobs:
         name: Deploy site in DocusaurOps
         uses: ./.github/workflows/deploy-site.yml
         with:
-            environment: ${{ inputs.environment || ((github.ref == 'refs/heads/main' || contains(github.ref, 'refs/heads/hotfix')) && 'prod' || github.ref == 'refs/heads/develop' && 'dev' || contains(github.ref, 'refs/heads/release') && 'prod' || contains(github.ref, 'refs/heads/feature') && 'dev' || 'dev') }}
             app-name: ${{ inputs.app-name || 'root' }}
             action: ${{ inputs.action || 'deploy' }}
             documentation-path: 'documentation'
