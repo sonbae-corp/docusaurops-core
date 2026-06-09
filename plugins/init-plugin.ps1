@@ -62,6 +62,9 @@ foreach ($file in $targetFiles) {
 		-EndTokenPattern $EndTokenPattern `
 		-NoWarning `
 		-Verbose:$VerbosePreference
+
+	# Remove the template source after successful token replacement.
+	Remove-Item -Path $file.FullName -Force
 }
 
 Write-Verbose "Plugin token initialization completed."
