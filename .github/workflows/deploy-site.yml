@@ -199,7 +199,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v3
         with:
-          creds: ${{ inputs.environment == 'prod' && secrets.DOCUSAUROPS_AZURE_DEPLOY_CREDS_PROD || secrets.DOCUSAUROPS_AZURE_DEPLOY_CREDS_DEV }}
+          creds: ${{ secrets.DOCUSAUROPS_AZURE_DEPLOY_CREDS }}
           enable-AzPSSession: true
                     
       - name: Deploy app service code
