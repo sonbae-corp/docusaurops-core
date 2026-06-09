@@ -31,7 +31,7 @@ Argument-to-variable mapping:
 ## Procedure
 
 1. Download the latest template archive from:
-   `https://api.github.com/repos/sonbae-corp/docusaurops-core/zipball/main`
+   `https://api.github.com/repos/sonbae-corp/docusaurops-template/zipball/main`
 
    Use header with the current user token retrieved via `gh auth token`: `Authorization: Bearer <user token>`
 
@@ -50,7 +50,6 @@ Argument-to-variable mapping:
    - `ENV_PROJECT_DESCRIPTION` (optional): Short project description (e.g. `This project is a sample documentation site.`). Infer from solution or use a placeholder.
    - `ENV_PROJECT_CONTACT` (optional): Contact email (e.g. `contact@example.com`). Infer from current logged-in user if missing.
    - `ENV_PROJECT_TECHNOLOGIES` (optional): Comma-separated technologies (max 4) (e.g. `JavaScript, Node.js, React`). Infer from solution if missing.
-   - `ENV_DOCUSAUROPS_HOST_REPO` (required): Repository hosting DocusaurOps (use default: `sonbae-corp/docusaurops-core`).
 
 
 6. Write values to `/documentation/.env.docusaurops`.
@@ -60,7 +59,6 @@ Argument-to-variable mapping:
    - `[[ENV_SITE_TITLE]]` → value of `ENV_SITE_TITLE`
    - `[[ENV_BASE_URL]]` → value of `ENV_BASE_URL`
    - `[[ENV_DOC_PATH]]` → documentation folder name chosen by the user (default: `documentation`, no leading/trailing slashes)
-   - `[[ENV_DOCUSAUROPS_HOST_REPO]]` → Repository hosting DocusaurOps (default: `sonbae-corp/docusaurops-core`).
 
 8. Run in `/documentation` (or folder name set by the user):
    ```
