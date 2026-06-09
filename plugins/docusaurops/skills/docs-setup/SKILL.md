@@ -31,7 +31,7 @@ Argument-to-variable mapping:
 ## Procedure
 
 1. Download the latest template archive from:
-   `https://api.github.com/repos/sonbae-corp/docusaurops-core/zipball/develop`
+   `https://api.github.com/repos/sonbae-corp/docusaurops-core/zipball/main`
 
    Use header with the current user token retrieved via `gh auth token`: `Authorization: Bearer <user token>`
 
