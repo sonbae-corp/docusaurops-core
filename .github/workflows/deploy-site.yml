@@ -91,6 +91,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs: 
       ENV_AZURE_DEPLOY_WEBAPP_NAME: ${{ steps.deployAzureStack.outputs.ENV_AZURE_DEPLOY_WEBAPP_NAME }}
+      ENV_AZURE_DOCUSAUROPS_SITE_URL: ${{ steps.deployAzureStack.outputs.ENV_AZURE_DOCUSAUROPS_SITE_URL }}
     env:
       ENV_AZURE_DEPLOY_LOCATION: ${{ needs.init.outputs.ENV_AZURE_DEPLOY_LOCATION }}
       ENV_AZURE_ENV_NAME: ${{ needs.init.outputs.ENV_AZURE_ENV_NAME }}
@@ -143,10 +144,6 @@ jobs:
     needs: [init, deploy]
     env:
       ENV_AZURE_DOCUSAUROPS_SITE_URL: ${{ needs.deploy.outputs.ENV_AZURE_DOCUSAUROPS_SITE_URL || needs.init.outputs.ENV_AZURE_DOCUSAUROPS_SITE_URL }}
-      ENV_AZURE_DOCUSAUROPS_COPILOT_CONNECTOR_ID: ${{ needs.init.outputs.ENV_AZURE_DOCUSAUROPS_COPILOT_CONNECTOR_ID }}
-      ENV_AZURE_DOCUSAUROPS_DOMAIN: ${{ needs.init.outputs.ENV_AZURE_DOCUSAUROPS_DOMAIN }}
-      ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID: ${{ needs.init.outputs.ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID }}
-      ENV_AZURE_DEPLOY_TENANT_ID: ${{ needs.init.outputs.ENV_AZURE_DEPLOY_TENANT_ID }}
     defaults:
       run:
         working-directory: ./${{ inputs.documentation-path }}

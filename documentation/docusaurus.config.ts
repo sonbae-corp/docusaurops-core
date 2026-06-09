@@ -160,11 +160,7 @@ const config: Config = {
               plugins: [
                 new webpack.EnvironmentPlugin({
                   ENV_AZURE_DOCUSAUROPS_SITE_URL: process.env.ENV_AZURE_DOCUSAUROPS_SITE_URL ? process.env.ENV_AZURE_DOCUSAUROPS_SITE_URL : 'http://localhost:3000',
-                  ENV_BASE_URL: '/',
-                  ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID: process.env.ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID ?? '',
-                  ENV_AZURE_DOCUSAUROPS_DOMAIN: process.env.ENV_AZURE_DOCUSAUROPS_DOMAIN ?? '',
-                  ENV_AZURE_DEPLOY_TENANT_ID: process.env.ENV_AZURE_DEPLOY_TENANT_ID ?? '',
-                  ENV_AZURE_DOCUSAUROPS_COPILOT_CONNECTOR_ID: process.env.ENV_AZURE_DOCUSAUROPS_COPILOT_CONNECTOR_ID ?? ''
+                  ENV_BASE_URL: '/'
                 })
               ]
             };
