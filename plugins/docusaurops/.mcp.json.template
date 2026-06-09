@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+	"workiq_mcpWordServer": {
+		"url": "https://agent365.svc.cloud.microsoft/agents/tenants/{{ENV_AZURE_DEPLOY_TENANT_ID}}/servers/mcp_WordServer",
+		"type": "http"
+	},
+	"workiq_mcp_M365Copilot": {
+		"url": "https://agent365.svc.cloud.microsoft/agents/tenants/{{ENV_AZURE_DEPLOY_TENANT_ID}}/servers/mcp_M365Copilot",
+		"type": "http"
+	}
+  }
+}
+
+
+
+
+

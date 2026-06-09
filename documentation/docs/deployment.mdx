@@ -202,10 +202,19 @@ When the deployment is done, you need to add a new variable `ENV_AZURE_DOCUSAURO
 |---|---|---|
 | `ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME` | The name of the root web application deployed in Azure. This is used to update the sitemap configuration with the correct URL of the root site. | `app-docusaurops-root-qlrnl` |
 
-
-
 4. Test the documentation setup from a consumer repository
 
+- Because the plugin will bell availabel throug h repository makreplace and downloaded directly from GitHub files, you need to prepare the plugin to refernce correct URLs and ids
+
+    - From the `/plugins` folder, run the script replacing the corresponding variables with the ones from your environment:
+
+    ```powershell
+    ./plugins/init-plugin.ps1 -Tokens @{ ENV_AZURE_DEPLOY_TENANT_ID = "00000000-0000-0000-0000-000000000000"; ENV_DOCUSAUROPS_HOST_REPO = "your-org/docusaurops-core" } -Verbose
+    ```
+
+    It will replace all tokens in .template files and generate the final files used by the plugin in GitHub.
+
+    Once done, commit new generated files to the GitHub repository.
 
 
 4. Create a new "Enterprise Websites" Copilot connector.

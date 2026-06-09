@@ -59,6 +59,7 @@ Import-Module Az.KeyVault -Verbose:$false
 Login-Azure -Manual:$Manual
 
 try {
+
     $templateTemplateFilePath = Join-Path -Path $PSScriptRoot -ChildPath "./templates/core/main.bicep"
 
     $rbacPrincipalsList = $ENV_AZURE_DEPLOY_STACK_RBAC_PRINCIPALS
