@@ -65,14 +65,25 @@ Argument-to-variable mapping:
    npm i
    ```
 
-9. After dependencies install successfully, ask the user whether to start the local server. If yes, run in `/documentation` (or folder name set by the user):
+9. Optional `DEMO` mode (only when explicitly requested by the user):
+   - After the documentation structure is in place, generate fake sample documentation content for an IT development project.
+   - Create 3 to 4 pages in `docs/` (or equivalent project docs folder), for example:
+     - `architecture`
+     - `api-overview`
+     - `deployment`
+     - `runbook` (optional 4th page)
+   - Use appealing, polished markdown structure with realistic but fictional content (headings, tables, code snippets, diagrams, and callouts).
+   - Ensure links/sidebar navigation are updated so demo pages are easy to browse.
+   - Do not overwrite existing user-authored docs without explicit confirmation.
+
+10. After dependencies install successfully, ask the user whether to start the local server. If yes, run in `/documentation` (or folder name set by the user):
    ```
    npm run start
    ```
 
-10. When the local server starts, open `http://localhost:3000/`.
+11. When the local server starts, open `http://localhost:3000/`.
 
-11. Clean up temporary artifacts (downloaded archive and extraction folder).
+12. Clean up temporary artifacts (downloaded archive and extraction folder).
 
 ## Rules
 
