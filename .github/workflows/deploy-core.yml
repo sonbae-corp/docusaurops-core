@@ -17,60 +17,60 @@ on:
 
 jobs:
 
-  deploy_core:
-    name: Deploy DocusaurOps infrastructure 
-    runs-on: ubuntu-latest
-    env:
-      ENV_AZURE_ENV_NAME: ${{ vars.ENV_AZURE_ENV_NAME }}
-      ENV_AZURE_DEPLOY_LOCATION: ${{ vars.ENV_AZURE_DEPLOY_LOCATION }}
-      ENV_AZURE_DEPLOY_TENANT_ID: ${{ vars.ENV_AZURE_DEPLOY_TENANT_ID }}
-      ENV_AZURE_DEPLOY_SUBSCRIPTION_ID: ${{ vars.ENV_AZURE_DEPLOY_SUBSCRIPTION_ID }}
-      ENV_AZURE_DEPLOY_STACK_RBAC_PRINCIPALS: ${{ vars.ENV_AZURE_DEPLOY_STACK_RBAC_PRINCIPALS }}  
-      ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID: ${{ vars.ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID }}
-      ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_SECRET: ${{ secrets.ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_SECRET }}
-      ENV_AZURE_DOCUSAUROPS_CERT_PASSWORD: ${{ secrets.ENV_AZURE_DOCUSAUROPS_CERT_PASSWORD }}
-      ENV_AZURE_DOCUSAUROPS_CERT_BASE64_PFX: ${{ secrets.ENV_AZURE_DOCUSAUROPS_CERT_BASE64_PFX }}
-    steps:
-      - name: Checkout DocusaurOps repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Install Bicep
-        shell: sh
-        run: |
-          curl -Lo bicep https://github.com/Azure/bicep/releases/download/v0.39.26/bicep-linux-x64
-          chmod +x ./bicep
-          sudo mv ./bicep /usr/local/bin/bicep
-
-      - name: Install PowerShell Modules
-        shell: pwsh
-        run: |
-          Install-Module Az.Accounts -RequiredVersion 5.3.4 -Force
-          Install-Module Az.Resources -RequiredVersion 9.0.0  -Force
-          Install-Module Az.Network -RequiredVersion 7.26.0 -Force
-          Install-Module Az.Websites -RequiredVersion 3.4.2 -Force
-          Install-Module Az.KeyVault -RequiredVersion 6.3.0 -Force
-
-      - name: Azure Login
-        uses: azure/login@v3
-        with:
-          creds: ${{ secrets.DOCUSAUROPS_AZURE_DEPLOY_CREDS }}
-          enable-AzPSSession: true
-
-      - name: Deploy Azure infrastructure
-        shell: pwsh
-        id: deployAzureStack
-        run: |
-          ./deploy/deploy-core.ps1 -Env CI -Verbose
-
-  # deploy_root_site:
-        
-  #       name: Deploy root site in DocusaurOps
-  #       needs: deploy_core
-  #       uses: ./.github/workflows/deploy-site.yml
+  # deploy_core:
+  #   name: Deploy DocusaurOps infrastructure 
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     ENV_AZURE_ENV_NAME: ${{ vars.ENV_AZURE_ENV_NAME }}
+  #     ENV_AZURE_DEPLOY_LOCATION: ${{ vars.ENV_AZURE_DEPLOY_LOCATION }}
+  #     ENV_AZURE_DEPLOY_TENANT_ID: ${{ vars.ENV_AZURE_DEPLOY_TENANT_ID }}
+  #     ENV_AZURE_DEPLOY_SUBSCRIPTION_ID: ${{ vars.ENV_AZURE_DEPLOY_SUBSCRIPTION_ID }}
+  #     ENV_AZURE_DEPLOY_STACK_RBAC_PRINCIPALS: ${{ vars.ENV_AZURE_DEPLOY_STACK_RBAC_PRINCIPALS }}  
+  #     ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID: ${{ vars.ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID }}
+  #     ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_SECRET: ${{ secrets.ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_SECRET }}
+  #     ENV_AZURE_DOCUSAUROPS_CERT_PASSWORD: ${{ secrets.ENV_AZURE_DOCUSAUROPS_CERT_PASSWORD }}
+  #     ENV_AZURE_DOCUSAUROPS_CERT_BASE64_PFX: ${{ secrets.ENV_AZURE_DOCUSAUROPS_CERT_BASE64_PFX }}
+  #   steps:
+  #     - name: Checkout DocusaurOps repo
+  #       uses: actions/checkout@v4
   #       with:
-  #           app-name: ${{ 'root' }}
-  #           action: ${{ 'deploy' }}
-  #           documentation-path: 'documentation'
-  #       secrets: inherit
+  #         fetch-depth: 0
+
+  #     - name: Install Bicep
+  #       shell: sh
+  #       run: |
+  #         curl -Lo bicep https://github.com/Azure/bicep/releases/download/v0.39.26/bicep-linux-x64
+  #         chmod +x ./bicep
+  #         sudo mv ./bicep /usr/local/bin/bicep
+
+  #     - name: Install PowerShell Modules
+  #       shell: pwsh
+  #       run: |
+  #         Install-Module Az.Accounts -RequiredVersion 5.3.4 -Force
+  #         Install-Module Az.Resources -RequiredVersion 9.0.0  -Force
+  #         Install-Module Az.Network -RequiredVersion 7.26.0 -Force
+  #         Install-Module Az.Websites -RequiredVersion 3.4.2 -Force
+  #         Install-Module Az.KeyVault -RequiredVersion 6.3.0 -Force
+
+  #     - name: Azure Login
+  #       uses: azure/login@v3
+  #       with:
+  #         creds: ${{ secrets.DOCUSAUROPS_AZURE_DEPLOY_CREDS }}
+  #         enable-AzPSSession: true
+
+  #     - name: Deploy Azure infrastructure
+  #       shell: pwsh
+  #       id: deployAzureStack
+  #       run: |
+  #         ./deploy/deploy-core.ps1 -Env CI -Verbose
+
+  deploy_root_site:
+        
+        name: Deploy root site in DocusaurOps
+        needs: deploy_core
+        uses: ./.github/workflows/deploy-site.yml
+        with:
+            app-name: ${{ 'root' }}
+            action: ${{ 'deploy' }}
+            documentation-path: 'documentation'
+        secrets: inherit

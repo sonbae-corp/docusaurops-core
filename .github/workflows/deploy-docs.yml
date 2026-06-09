@@ -7,13 +7,6 @@ permissions:
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Target environment: dev or prod'
-        required: true
-        type: choice
-        options:
-          - dev
-          - prod
       app-name:
         description: 'Name of the DocusaurOps app (alphanumeric, hyphens, underscores only)'
         required: true
@@ -31,9 +24,9 @@ on:
           - rollback
         default: 'deploy'
 
-  push:
-    paths:
-      - 'documentation/**'
+  # push:
+  #   paths:
+  #     - 'documentation/**'
 jobs:
     
     deploy:
