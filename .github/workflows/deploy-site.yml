@@ -177,6 +177,7 @@ jobs:
     env:
       ENV_AZURE_DEPLOY_WEBAPP_NAME: ${{ needs.deploy.outputs.ENV_AZURE_DEPLOY_WEBAPP_NAME }}
       ENV_AZURE_DEPLOY_STACK_RG_NAME: "rg-docusaurops-${{ needs.init.outputs.ENV_AZURE_ENV_NAME }}"
+      ENV_AZURE_DOCUSAUROPS_SITE_URL: ${{ needs.deploy.outputs.ENV_AZURE_DOCUSAUROPS_SITE_URL || needs.init.outputs.ENV_AZURE_DOCUSAUROPS_SITE_URL }}
     steps:   
       - name: Checkout
         uses: actions/checkout@v4
@@ -216,3 +217,24 @@ jobs:
 
           Write-Verbose "Restarting App Service '$env:ENV_AZURE_DEPLOY_WEBAPP_NAME'..."
           az webapp restart --resource-group $env:ENV_AZURE_DEPLOY_STACK_RG_NAME --name $env:ENV_AZURE_DEPLOY_WEBAPP_NAME
+
+      - name: Output deployed site URL
+        shell: bash
+        run: |
+          baseUrl="${ENV_AZURE_DOCUSAUROPS_SITE_URL}"
+          appPath="${{ inputs.app-path }}"
+
+          # Normalize values to avoid malformed URLs with duplicated slashes.
+          baseUrl="${baseUrl%/}"
+          if [[ -z "$appPath" || "$appPath" == "/" ]]; then
+            finalUrl="${baseUrl}/"
+          else
+            appPath="${appPath#/}"
+            appPath="${appPath%/}"
+            finalUrl="${baseUrl}/${appPath}"
+          fi
+
+          echo "Deployed site URL: $finalUrl"
+          echo "::notice title=Deployed DocusaurOps Site::$finalUrl"
+          echo "### Deployed DocusaurOps Site" >> "$GITHUB_STEP_SUMMARY"
+          echo "[$finalUrl]($finalUrl)" >> "$GITHUB_STEP_SUMMARY"
