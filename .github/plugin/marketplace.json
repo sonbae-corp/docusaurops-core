@@ -1,0 +1,19 @@
+{
+  "name": "docusaurops-plugins",
+  "owner": {
+    "name": "DocusaurOps",
+    "email": "franck.cornu@outlook.com"
+  },
+  "metadata": {
+    "description": "Curated Github Copilot plugins for DocusaurOps. Made as part of the Microsoft Agents League Hackathon.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "docusaurops-plugin",
+      "description": "Manage documentation lifecycle in a unified way according to organization guidelines and best practices.",
+      "version": "1.0.0",
+      "source": "./plugins/docusaurop"
+    }
+  ]
+}

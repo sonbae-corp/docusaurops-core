@@ -1,0 +1,35 @@
+<svg width="320" height="80" viewBox="0 0 320 80" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">DocusaurOps Logo - Dark</title>
+  <desc id="desc">Flat green dinosaur holding a blue and orange infinity symbol with DocusaurOps text on dark background.</desc>
+
+  <!-- Background (can be set to none if your site already has dark bg) -->
+  <rect width="320" height="80" fill="#111827"/>
+
+  <!-- Dinosaur body -->
+  <rect x="10" y="10" width="48" height="48" rx="8" ry="8" fill="#35C16F"/>
+  <!-- Spikes -->
+  <polygon points="14,10 22,2 30,10" fill="#FFB636"/>
+  <polygon points="22,10 30,2 38,10" fill="#FFB636"/>
+  <!-- Eye -->
+  <path d="M26 30 Q30 26 34 30" stroke="#020617" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- Mouth -->
+  <polyline points="22,40 26,44 30,40 34,44 38,40" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Infinity symbol -->
+  <g transform="translate(50,34) scale(0.7)">
+    <!-- Left loop (blue) -->
+    <path d="M20 20 C10 10 10 30 20 20 C30 10 30 30 20 20" fill="none" stroke="#60A5FA" stroke-width="4" stroke-linecap="round"/>
+    <!-- Right loop (orange) -->
+    <path d="M20 20 C30 10 30 30 20 20 C10 10 10 30 20 20" transform="translate(20,0)" fill="none" stroke="#FDBA74" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- Text -->
+  <text x="90" y="45" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        font-size="22" font-weight="700" fill="#F9FAFB">
+    Docusaur
+  </text>
+  <text x="190" y="45" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+        font-size="22" font-weight="700" fill="#FDBA74">
+    Ops
+  </text>
+</svg>

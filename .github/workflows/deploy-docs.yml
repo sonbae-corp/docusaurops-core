@@ -1,0 +1,48 @@
+name: Deploy documentation in DocusaurOps
+
+permissions:
+  id-token: write
+  contents: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment: dev or prod'
+        required: true
+        type: choice
+        options:
+          - dev
+          - prod
+      app-name:
+        description: 'Name of the DocusaurOps app (alphanumeric, hyphens, underscores only)'
+        required: true
+        type: string
+      app-path:
+        description: 'URL path for the app (without leading or trailing slash, e.g., "my-app")'
+        required: false
+        type: string
+      action:
+        description: 'Action to perform: deploy or rollback'
+        required: false
+        type: choice
+        options:
+          - deploy
+          - rollback
+        default: 'deploy'
+
+  push:
+    paths:
+      - 'documentation/**'
+jobs:
+    
+    deploy:
+        
+        name: Deploy site in DocusaurOps
+        uses: ./.github/workflows/deploy-site.yml
+        with:
+            environment: ${{ inputs.environment || ((github.ref == 'refs/heads/main' || contains(github.ref, 'refs/heads/hotfix')) && 'prod' || github.ref == 'refs/heads/develop' && 'dev' || contains(github.ref, 'refs/heads/release') && 'prod' || contains(github.ref, 'refs/heads/feature') && 'dev' || 'dev') }}
+            app-name: ${{ inputs.app-name || 'root' }}
+            action: ${{ inputs.action || 'deploy' }}
+            documentation-path: 'documentation'
+        secrets: inherit

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">DocusaurOps Logo - Light Mode</title>
+  <desc id="desc">Flat green dinosaur holding a blue and orange infinity symbol with DocusaurOps text.</desc>
+
+  <!-- Dinosaur body -->
+  <path fill="#35C16F" d="M80 160c0-44 36-80 80-80h192c44 0 80 36 80 80v192c0 44-36 80-80 80H160c-44 0-80-36-80-80V160z"/>
+  <!-- Spikes -->
+  <path fill="#35C16F" d="M160 80c-16 0-32 8-48 24v16h48V80z"/>
+  <!-- Eye -->
+  <path d="M200 180c0 10 8 18 18 18s18-8 18-18-8-18-18-18-18 8-18 18z" fill="#111827"/>
+  <!-- Mouth -->
+  <path d="M180 220h80l-10 10 10 10-10 10 10 10h-80" stroke="#111827" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Infinity symbol -->
+  <g transform="translate(180,260) scale(1.2)">
+    <path d="M40 40c-22-22-58-22-80 0s-22 58 0 80 58 22 80 0l40-40-40-40z" fill="#2F80ED"/>
+    <path d="M120 40c22-22 58-22 80 0s22 58 0 80-58 22-80 0l-40-40 40-40z" fill="#F2994A"/>
+  </g>
+
+  <!-- Text -->
+  <text x="80" y="460" font-family="Segoe UI, sans-serif" font-size="64" font-weight="700" fill="#111827">Docusaur</text>
+  <text x="360" y="460" font-family="Segoe UI, sans-serif" font-size="64" font-weight="700" fill="#F97316">Ops</text>
+</svg>

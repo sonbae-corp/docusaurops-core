@@ -1,0 +1,165 @@
+---
+sidebar_position: 2
+toc_max_heading_level: 4
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+import VSCodePluginsSetting from './img/vscode_settings_plugins.png';
+
+import CopilotCLIPlugin from './img/copilot_cli_plugin.png';
+
+# Getting started with DocusaurOps
+
+DocusaurOps is a GitHub Copilot plugin for Visual Studio Code and the GitHub Copilot CLI. It provides a set of agents and skills to help you in your documentation mangemtn acroos your organizatio ntechnical teams.
+
+## Prerequisites
+
+| Requirement | Notes |
+|-------------|-------|
+| [GitHub Copilot license]() | Required |
+| [Visual Studio Code](https://code.visualstudio.com/) | Required |
+| [Git](https://git-scm.com/) | Required |
+| [GitHub CLI](https://cli.github.com/) | Recommended for CLI usage |
+| [GitHub Copilot CLI](https://github.com/features/copilot/cli) | Recommended for CLI usage |
+
+## Install
+
+**Step 1 — Download the plugin**
+
+Download the latest release from the [DocusaurOps releases page](https://github.com/FranckyC/agents-league-docusaurops/releases) and extract it into the root of your solution repository (next to your `README.md`):
+
+```
+<your solution root>/
+└── plugins/
+    ├── agents/
+    │   └── ...
+    └── skills/
+        └── ...
+```
+
+**Step 2 — Register the plugin**
+
+<Tabs defaultValue="cli" values={[
+{ label: 'Copilot CLI', value: 'cli' },
+{ label: 'Copilot VS Code', value: 'vscode' },
+]}>
+<TabItem value="cli">
+
+Open a terminal from the root folder, start the Copilot CLI, then install the plugin:
+
+```bash
+copilot
+```
+
+```bash
+/plugin install ./plugins/docusaurops
+```
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[80%]" src={CopilotCLIPlugin}/>
+    </div>
+
+</TabItem>
+<TabItem value="vscode">
+
+1. Open settings with `Ctrl+,`, search for `chat.pluginLocations`, and add the plugin path:
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[80%]" src={VSCodePluginsSetting}/>
+    </div>
+
+2. Restart VS Code and open a new Copilot chat. You should see the agent listed and ready to use:
+
+    <div className="flex justify-center">
+        <img className="w-[40%]" src={DocusaurOpsAgentChatVsCode}/>
+    </div>
+
+</TabItem>
+</Tabs>
+
+---
+
+## Agents
+
+| Agent | Description |
+|-------|-------------|
+| `DocusaurOps Agent` | Main agent to interact with DocusaurOps. Assists with creating and managing your documentation site, asking questions about existing content, and more. |
+
+---
+
+## Skills
+
+### Documentation skills
+
+| Skill | Description |
+|-------|-------------|
+| `docusaurops-docs-setup` | Set up or upgrade your local solution with the latest DocusaurOps documentation template. |
+| `docusaurops-docs-ask` | Get answers based on all indexed DocusaurOps sites content. |
+
+#### `docusaurops-docs-setup`
+
+Sets up a new documentation site by cloning the latest DocusaurOps template, customizing it with your information, and configuring CI/CD pipelines to deploy your site on Azure. Also handles upgrading an existing documentation site to the latest template.
+
+> The site is always published under `https://docusaurops.com`.
+
+**Usage:**
+
+```bash
+/skill docusaurops-docs-setup "Setup documentation for project [site_title] [site_slug] [site_tagline] [repository_url] [contact_email] [project_technologies]"
+```
+
+> Only `site_title` and `site_slug` are required.
+
+**What happens:**
+1. Downloads the latest DocusaurOps documentation template using your GitHub credentials.
+2. Fills in the provided information and prompts you to confirm or supply missing details.
+3. Merges the template with your existing documentation, or creates the documentation structure if it doesn't exist.
+4. Runs the documentation site locally.
+
+---
+
+#### `docusaurops-docs-ask`
+
+Asks questions about the content of all DocusaurOps sites using a custom search engine. Returns an answer based on relevant content found across all indexed sites.
+
+**Usage:**
+
+```bash
+/skill docusaurops-docs-ask "Where is the documentation about project X?"
+```
+
+```bash
+/skill docusaurops-docs-ask "Have we already implemented a custom Copilot solution? If yes, show the approach taken and key points."
+```
+
+---
+
+### Architecture skills
+
+| Skill | Description |
+|-------|-------------|
+| `docusaurops-azure-costing` | Determines infrastructure and operational costs from Bicep templates, producing a Markdown cost estimate with real-time CAD pricing from the Azure Retail Prices API. |
+
+#### `docusaurops-azure-costing`
+
+Analyzes a set of Bicep templates and generates a comprehensive Markdown cost estimate. It inventories every Azure resource (compute, storage, networking, AI services, private endpoints, etc.), fetches real-time **CAD** pricing from the [Azure Retail Prices API](https://learn.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices), and produces a cost breakdown covering:
+
+- **Infrastructure costs** — fixed monthly charges for compute, data, platform services, and private endpoints.
+- **AI model costs** — usage-based charges scaled by workload assumptions (tokens, messages, users).
+- **Total monthly estimate** — a combined summary with cost drivers and optimization opportunities.
+
+> Always uses the **production path** when templates have conditional environment branches. Falls back to official Microsoft pricing pages or prompts the user when API results are unavailable.
+
+**Usage:**
+
+```bash
+/skill azure-costing "Daily active users: 1,382. Messages per user per day: ~5. Average input tokens per message: ~17,000. Average cached input tokens: ~7,500. Average output tokens per message: ~700." deploy/templates
+```
+
+**What happens:**
+1. Parses the workload assumptions from your arguments.
+2. Scans all `.bicep` files in the specified directory to catalog every deployed Azure resource.
+3. Queries the Azure Retail Prices API for current CAD pricing per resource.
+4. Asks for an output file path, then generates a detailed Markdown cost estimate with infrastructure costs, AI model costs, a total monthly estimate, and cost optimization strategies.

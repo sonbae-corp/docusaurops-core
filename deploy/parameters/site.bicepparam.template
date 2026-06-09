@@ -1,0 +1,13 @@
+using '../templates/site/add-site.bicep'
+
+// Site deployment parameters
+param environmentName = '{{ENV_AZURE_ENV_NAME}}'
+param location = '{{ENV_AZURE_DEPLOY_LOCATION}}'
+param resourcePrefix = '{{ENV_AZURE_DEPLOY_RESOURCE_PREFIX}}'
+param rgName = '{{ENV_AZURE_DEPLOY_STACK_RG_NAME}}'
+
+// Unique name for the new site (e.g., "blog", "docs")
+param appName = '{{APP_NAME}}'
+param appBasePath = '{{APP_PATH}}'
+
+param entraIdClientId = '{{ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID}}'

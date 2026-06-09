@@ -1,0 +1,189 @@
+import GhHostRepo from './img/create_host_gh_repo.png';
+// import GhHostRepoCode from './img/create_host_gh_repo_code.png';
+import GhTokenPermissions from './img/create_github_token_permissions.png';
+import GhRepoList from './img/gh_repo_list.png';
+import GhNewOrgSecret from './img/gh_new_org_secret.png';
+import GhOrgSecrets from './img/gh_org_secrets.png';
+import GhNewOrgVar from './img/gh_new_org_var.png';
+
+Steps to reproduce this architecture in your organization:
+
+1. Create the main and template GitHub repositories.
+
+The first operation to is to craete the required repostitories in your GitHub organization. You need to create:
+
+==> **"Core" repository**
+
+A repository to host the DocusaurOps core infrastructure code. It will be used to deploy the core platform in Azure. You can name it **"docusaurops-core"** for example. 
+Copy the content of the folder `/core` in this repository.
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[50%]" src={GhHostRepo}/>
+        {/* <img className="w-[50%]" src={GhHostRepoCode}/> */}
+    </div>
+
+==> **"Template" repository**
+
+A repository to host the documentation template. It will be used as a base when creating or upgrading documentation from a consumer repository through the plugin. You can name it **"docusaurops-template"** for example.
+Copy the content of the folder `/templates` in this repository.
+
+
+==> **"Test" repository**
+
+This repository will be used to test the plugin capabilities end-to-end. You can name it **"docusaurops-test"** for example. You can leave it empty for now, we will use it later to test the deployment of a documentation site and the plugin capabilities.
+
+In the end, you should have something like this:
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[50%]" src={GhRepoList}/>
+    </div>
+
+1. Create SPN in Entra ID.
+
+In order for the solution to operate, you'll need to create two distinct SPN in your Azure Entra ID directory:
+
+    - One used for the DocusaurOps site authentication (ex: **DocusaurOps - Auth**) . This SPN will be shared by all documentaion sites to authenticate users via EasyAuth.
+      In the manifest, make sure the setting "Enable ID token" is enabled:
+
+        ```json
+        ...
+        "web": {
+            ...
+            "implicitGrantSettings": {
+                "enableAccessTokenIssuance": false,
+                "enableIdTokenIssuance": true
+            },
+            ...
+        },
+        ...
+        ```
+
+    - One used for automated deployment from consumer repositories (ex: **DocusaurOps - Deploy**) This SPN requires to have the "Owner" role on the subscription as it will deploy resources via a deployment stack at subscription level. 
+      Also, this SPN needs to be configured as the owner of the Authentication SPN (the previous one you created). This is required to be able to configure redirect URLs automatically for new deployed sites (i.e once a new site is added, a new redirect URL is added to the shared SPN to get the authentication flow work).
+
+        Using Azure CLI, login as admin and run this command: `az ad app owner add --id <SPN_APP_ID_USED_FOR_AUTH> --owner-object-id <DEPLOYMENT_ENTEPRISE_APPLICATION_SPN_OBJECT_ID>`.
+
+        The `--owner-object-id` here is the Object ID of the service principal used for deployment in **Enterprise Applications** (not the one in App Registrations). You can find it by going to Azure Portal > Entra ID > Enterprise Applications > Search for the SPN name > Overview.
+
+        :::info Why not using a managed identity with federated crednetials for Azure infrastucture deployment from GitHub?
+            Because federated cerencetials in managed identity must be created per repository and theand we don't know in advance which repository will use this feature, we can't crete them in advance.
+            Having a client ID/secret ensure any exsiting ro new repo can actually deploy a site if needed.
+        :::
+
+        Then you need to add the API permission `Application.ReadWrite.OwnedBy` to this SPN and grant admin consent. This permission is required to allow the deployment SPN to update the authentication SPN with new redirect URLs when new documentation sites are deployed.
+
+2. Create GitHub organization secrets.
+
+In order fo consumers repositoriues to execute reusable workflow from the core repository, you need to create the following secrets in your GitHub organization. Organization secrets are shared by all repositories prevenintg consumers to exlicitly add them in their repository:
+
+| Secret name | Description |
+|-------------|-------------|
+| `DOCUSAUROPS_REPO_TOKEN` | GitHub token with access to the `docusaurops-core` repository. This is required as the consumer repos will execute workdlows in the context of the core repository.     |
+| `DOCUSAUROPS_AZURE_DEPLOY_CREDS` | Azure credentials to connect to the DEV tenant. Used in the `azure/login@v3` action. |
+|
+
+**To generate a repository token**:
+
+In GitHub, go to your profile, settings->developer settings->personal access tokens->tokens (classic) and generate a new token with the following permissions:
+
+- Read access to actions variables, code, environments, and metadata
+- Read and Write access to actions
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[50%]" src={GhTokenPermissions}/>
+    </div>
+
+**To generate Azure credentials for GitHub Actions (for the `azure/login@v3` action)**:
+
+```json
+{
+    "clientSecret":  "<client-secret-of-the-deployment-SPN>",
+    "subscriptionId":  "<subscription-id>",
+    "tenantId":  "<tenant-id>",
+    "clientId":  "<client-id-of-the-deployment-SPN>"
+}
+```
+
+Add the two secrets at the organization level in GitHub. This way, they will be automatically available in all repositories within the organization, including the consumer repositories that will use the reusable workflows from the core repository to deploy documentation sites:
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[50%]" src={GhNewOrgSecret}/>
+    </div>
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[50%]" src={GhOrgSecrets}/>
+    </div>
+
+:::info
+If you don't have access to organization secrets, you can add replicate these secrets in each consumer repository (at repository level). However, using organization secrets is recommended for better manageability and security as this solution is desgined to be scaled accors the entire org. You can alos create a organization for free if you don't have one https://github.com/organizations/plan, and add the repositories there to be able to use organization secrets.
+:::
+
+Also, you need to create the following variable in your GitHub organization:
+
+| Variable name | Description |
+|---|---|   
+| `DOCUSAUROPS_HOST_REPO` | The name of the repository hosting the DocusaurOps core infrastructure. This is required as the consumer repositories will execute workflows in the context of the core repository (ex `org/docusaurops-core`).     | 
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[50%]" src={GhNewOrgVar}/>
+    </div>
+
+3. Deploy the DocusaurOps core infrastructure in Azure
+
+- Generate a self signed certificate.
+
+This certificate is used by the application gateway to secure access to all documentations sites through HTTPS. For the purpose of this solution, we use a self signed certificate, but in a production environment, it is recommended to use a certificate from a trusted authority to ensure the security of your documentation sites:
+
+:::important
+The domain name should be in this format: `"docusaurops-<ENV_AZURE_ENV_NAME>.<ENV_AZURE_DEPLOY_LOCATION>.cloudapp.azure.com"` as it must match the hostname that the Application Gateway will expose.
+
+Ex: `"docusaurops-my-env.canadacentral.cloudapp.azure.com"`
+:::
+
+```powershell
+.\scripts\New-SelfSignedCertificate.ps1 -Domain "docusaurops-demotest.canadacentral.cloudapp.azure.com" -PfxPassword (ConvertTo-SecureString "bAfD2m9AdF*dh_*c6xx_" -AsPlainText -Force) -InstallRootCA
+```
+
+This command create install also the Root certificate in your machine. This way the site will be trusted when using your brwoser (otherwise, you'll need to add it manuaylll, especially on Google Chrime or Edge).
+The scripts output the PFX certicate as base64 value. You need to use that value for the `ENV_AZURE_DOCUSAUROPS_CERT_BASE64_PFX` secrets in the next step. **After executing the script, the base64 value is automatically copied to your clipboard **.
+
+:::important
+The certificate pfx file is referenced by the `templates/main.bicep` when priviosiong the core infrastructure.
+:::
+
+- Configure variables and secrets on the core repository. This variable will be used to deploy the core infrastructure in Azure
+
+Variables:
+
+| Variable name | Description | Example |
+|---|---|---|
+| `ENV_AZURE_ENV_NAME` | Short environment name used in resource naming. | `my-env` |
+| `ENV_AZURE_DEPLOY_LOCATION` | Azure region where the platform will be deployed. | `canadacentral` |
+| `ENV_AZURE_DEPLOY_TENANT_ID` | Microsoft Entra tenant ID used for deployment authentication. | `00000000-0000-0000-0000-000000000000` |
+| `ENV_AZURE_DEPLOY_APP_CLIENT_ID` | Client ID of the service principal used for automated deployments. | `11111111-1111-1111-1111-111111111111` |
+| `ENV_AZURE_DEPLOY_APP_CLIENT_SECRET` | Client secret for the deployment service principal. Store this securely and never commit a real value. | `<deployment-spn-secret>` |
+| `ENV_AZURE_DEPLOY_SUBSCRIPTION_ID` | Azure subscription ID that hosts the platform resources. | `22222222-2222-2222-2222-222222222222` |
+| `ENV_AZURE_DEPLOY_STACK_ENV_NAME` | Logical stack name, usually derived from the environment stage. | `docusaurops-dev` |
+| `ENV_AZURE_DEPLOY_RESOURCE_PREFIX` | Prefix applied to generated Azure resource names. | `docusaurops` |
+| `ENV_AZURE_DEPLOY_STACK_RG_NAME` | Resource group name for the deployment stack. | `rg-docusaurops-dev` |
+| `ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID` | Client ID of the Entra application used by the DocusaurOps site. | `44444444-4444-4444-4444-444444444444` |
+| `ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_SECRET` | Client secret for the DocusaurOps Entra application. Store this securely and never commit a real value. | `<docusaurops-app-secret>` |
+| `ENV_AZURE_DEPLOY_STACK_RBAC_PRINCIPALS` | JSON array of objects defining additional RBAC principals (users or service principals) to be assigned roles on the deployed resources. Each object should have `principalId` and `principalType` properties. | `[{"principalId":"33333333-3333-3333-3333-333333333333","principalType":"ServicePrincipal"},{"principalId":"55555555-5555-5555-5555-555555555555","principalType":"User"}]`. For SPN, you must use the Object ID of the Enterprise application (not the app registration). For user type, this is simply the user ID in Entra |
+
+Secrets:
+
+| `ENV_AZURE_DOCUSAUROPS_CERT_BASE64_PFX` | Base64-encoded PFX certificate data for the Application Gateway SSL certificate. This should be the output from the certificate generation step. Store this securely as GitHub secert and never commit a real value. | `<base64-encoded-pfx-certificate>` |
+| `ENV_AZURE_DOCUSAUROPS_CERT_PASSWORD` | Password protecting the exported PFX certificate used by the gateway. Store this securely and never commit a real value. | `<certificate-password>` |
+
+
+- Test deployment
+
+4. Create a new "Enterprise Websites" Copilot connector.
+
+5. Enable WorkIQ APIs in your tenant.
+
+4. Create a test repository and test the plugin skills:
+    
+    - Refer to usage:
+
+

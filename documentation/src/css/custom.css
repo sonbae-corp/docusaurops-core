@@ -1,0 +1,99 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can override the default Infima variables here. */
+:root {
+  /* Primary Color Palette - Agents League Violet/Indigo */
+  --ifm-color-primary: #7c3aed;
+  --ifm-color-primary-dark: #6d28d9;
+  --ifm-color-primary-darker: #5b21b6;
+  --ifm-color-primary-darkest: #4c1d95;
+  --ifm-color-primary-light: #8b5cf6;
+  --ifm-color-primary-lighter: #a78bfa;
+  --ifm-color-primary-lightest: #c4b5fd;
+
+  /* Fonts */
+  --ifm-font-family-base: "Arial", sans-serif;
+  --ifm-heading-font-family: Georgia, "ITC Charter", serif;
+
+  /* Brand Accent Colors - from banner grid/dot accents */
+  --ifm-color-secondary: #6b7280;
+  --ifm-color-success: #10b981;
+  --ifm-color-info: #06b6d4;
+  --ifm-color-warning: #f59e0b;
+  --ifm-color-danger: #e84393;
+
+  /* Background & Surface Colors */
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #f5f3ff;
+
+  /* Text Colors */
+  --ifm-font-color-base: #0a0820;
+  --ifm-font-color-secondary: #3b3568;
+
+  /* Code & Syntax */
+  --ifm-code-font-size: 95%;
+  --ifm-code-background: #ede9fe;
+  --docusaurus-highlighted-code-line-bg: rgba(124, 58, 237, 0.1);
+
+  /* UI Elements */
+  --ifm-svg-text-color: #0a0820;
+  --ifm-navbar-background-color: #ffffff;
+  --ifm-navbar-shadow: 0 1px 3px 0 rgb(124 58 237 / 0.15);
+
+  /* Search Customization */
+  --pnpsearch-colorPrimary: #7c3aed;
+  --pnpsearch-colorPrimaryHover: #6d28d9;
+  --pnpsearch-textColor: #0a0820;
+  --pnpsearch-colorBackgroundDarkPrimary: #0a0820;
+  --pnpsearch-textColorDark: #ffffff;
+  --pnpsearch-fontFamilyPrimary: "Helvetica Neue", Arial, sans-serif;
+}
+
+/* For readability concerns, you should choose a lighter palette in dark mode. */
+[data-theme='dark'] {
+  /* Primary Color Palette - Agents League on Dark (banner deep indigo) */
+  --ifm-color-primary: #a78bfa;
+  --ifm-color-primary-dark: #8b5cf6;
+  --ifm-color-primary-darker: #7c3aed;
+  --ifm-color-primary-darkest: #6d28d9;
+  --ifm-color-primary-light: #c4b5fd;
+  --ifm-color-primary-lighter: #ddd6fe;
+  --ifm-color-primary-lightest: #ede9fe;
+  --ifm-heading-color: var(--ifm-color-primary-light);
+
+  /* Brand Accent Colors - banner grid/dot accents */
+  --ifm-color-secondary: #9ca3af;
+  --ifm-color-success: #10b981;
+  --ifm-color-info: #06b6d4;
+  --ifm-color-warning: #f59e0b;
+  --ifm-color-danger: #e84393;
+
+  /* Background & Surface Colors - banner deep navy/indigo */
+  --ifm-background-color: #0a0820;
+  --ifm-background-surface-color: #12103a;
+
+  /* Text Colors */
+  --ifm-font-color-base: #f0eeff;
+  --ifm-font-color-secondary: #c4b5fd;
+
+  /* Code & Syntax */
+  --ifm-code-background: #1a1245;
+  --docusaurus-highlighted-code-line-bg: rgba(167, 139, 250, 0.15);
+
+  /* UI Elements */
+  --ifm-svg-text-color: #f0eeff;
+  --ifm-navbar-background-color: #0a0820;
+  --ifm-navbar-shadow: 0 1px 3px 0 rgb(124 58 237 / 0.4);
+}
+
+.navbar--fixed-top {
+  height: 100%;
+}

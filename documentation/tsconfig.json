@@ -1,0 +1,8 @@
+{
+  "extends": "@docusaurus/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "sourceMap": true,
+    "jsx": "react-jsx"
+  }
+}

@@ -1,0 +1,208 @@
+import agw_backendpools from '../img/agw_backendpools.png';
+import agw_backendpool_edit from '../img/agw_backendpool_edit.png';
+import agw_custom_health_probe from '../img/agw_custom_health_probe.png';
+import agw_backend_settings from '../img/agw_backend_settings.png';
+import agw_listener from '../img/agw_listener.png';
+import agw_rule from '../img/agw_rule.png';
+
+import RedirectURL from '../img/root_webapp_redirect_url.png';
+import AuthProxyConvention from '../img/auth_proxy_convention.png';
+import RootWebAppAuth from '../img/root_webapp_auth.png';
+
+# Application Gateway Configuration
+
+## Configure the root App Service
+
+The root App Service is the web application that users hit when they navigate to `docusaurops.internal.com`. All web applications are protected by the same Entra ID application.
+
+### Configure Entra ID application
+
+1. Register a new Entra ID application.
+2. In the **Authentication** tab, add the redirect URL `https://docusaurops.internal.com/.auth/login/aad/callback` (web platform):
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[60%]" src={RedirectURL}/>
+    </div>
+
+3. Make sure the **ID Tokens** flag is checked.
+
+:::important
+Each application must have its own dedicated redirect URL.
+:::
+
+### Configure web application
+
+#### Forward proxy settings
+
+Because the application is accessed through the gateway rather than directly, the redirect URL from the OAuth2 authentication process must be set correctly. By default, it is built from the current URL hostname (e.g. `*.azurewebsites.net`), which exposes the backend URL to users. To preserve the gateway's incoming request domain, configure the forward proxy settings on the App Service so that the `X-Original-Host` header sent by the application gateway is used as the hostname (it is not forwarded by default).
+
+These settings can only be set programmatically — there is no UI option available. Example in Bicep:
+
+```bicep
+resource webAppConfig 'Microsoft.Web/sites/config@2022-09-01' = {
+  name: 'authsettingsV2'
+  kind: 'string'
+  parent: webApp
+  properties: {
+    httpSettings: {
+      forwardProxy: {
+        convention: 'Custom'
+        customHostHeaderName: 'X-Original-Host'
+      }
+    }
+  }
+}
+```
+
+To verify the settings are correctly applied, go to **Kudu → App settings**:
+
+<div className="flex justify-center mb-10">
+    <img className="w-[60%]" src={AuthProxyConvention}/>
+</div>
+
+:::warning
+As an alternative to forward proxy settings, you can configure a custom domain at both the gateway and App Service level. However, in company environments this is not possible because App Service custom domain validation requires public DNS resolution, which is unavailable for private domains like `*.internal.com`.
+:::
+
+#### Authentication
+
+The web app is protected by an Entra ID application configured with default options:
+
+<div className="flex justify-center mb-10">
+    <img className="w-[60%]" src={RootWebAppAuth}/>
+</div>
+
+---
+
+## Configure Application Gateway
+
+### Backend pools
+
+The backend pools correspond to the web applications to integrate. Create two pools — one for the root web application and one for the solution architecture application — and select **App Services** as targets.
+
+<div className="flex space-x-2 justify-center mb-10">
+    <div className="w-[50%] p-2">
+      <img src={agw_backendpools}/>
+    </div>
+    <div className="w-[50%] p-2">
+      <img src={agw_backendpool_edit}/>
+    </div>
+</div>
+
+### Health probes
+
+A custom health probe is required for the root web application to handle authentication responses. Health probes do not handle the authentication flow by default, so HTTP `401` must be configured as a valid response.
+
+Create a new health probe with the following settings:
+
+<div className="flex justify-center mb-10">
+  <div className="w-[50%]">
+  | Setting | Value |
+  |---------|-------|
+  | Name | `azurewebsitesprob` |
+  | Protocol | HTTPS |
+  | Pick host name from backend settings | Yes |
+  | Pick port from backend settings | Yes |
+  | Path | `/` |
+  | Interval (seconds) | 30 |
+  | Timeout (seconds) | 30 |
+  | Unhealthy threshold | 3 |
+  | Use probe matching conditions | Yes |
+  | HTTP response status code match | 200-401 |
+  | HTTP response body match | (Empty) |
+  | Backend settings | (Assigned later) |
+  </div>
+  <div className="w-[50%] p-2">
+    <img   src={agw_custom_health_probe}/>
+    </div>
+</div>
+
+:::info
+All web applications share the same probe.
+:::
+
+### Backend settings
+
+Create two backend settings — one for each application (`root` and `sa`) — with the following configuration:
+
+<div className="flex justify-center mb-10">
+  <div className="w-[50%]">
+
+  | Setting | Value |
+  |---------|-------|
+  | Backend protocol | HTTPS |
+  | Backend port | 443 |
+  | Backend server's certificate is issued by a well-known CA | Yes (`azurewebsites.net` domain) |
+  | Cookie-based affinity | Disable |
+  | Connection draining | Disable |
+  | Request time-out (seconds) | 20 |
+  | Override backend path | Leave blank for root; set to `/` for other web applications accessed by routes |
+  | Override with new host name | Yes |
+  | Host name override | Pick host name from backend target (falls back to `https://{site}.azurewebsites.net`) |
+  | Use custom probe | Yes |
+  | Custom probe | `azurewebsitesprob` |
+
+  </div>
+  <div className="w-[50%] p-2">
+    <img src={agw_backend_settings}/>
+  </div>
+</div>
+
+### Listeners
+
+Create a new listener for `docusaurops.internal.com` with the following parameters:
+
+<div className="flex justify-center mb-10">
+  <div className="w-[50%]">
+
+  | Setting | Value |
+  |---------|-------|
+  | Listener name | `https` |
+  | Frontend IP | **Private** — ensures the application is not accessible from the public internet |
+  | Protocol | HTTPS |
+  | Port | 443 |
+  | Certificate | **Create new** — upload a `.pfx` certificate for `docusaurops.internal.com` with its password. The certificate can also be uploaded to Key Vault first. |
+  | Listener type | Basic |
+
+  </div>
+  <div className="w-[50%] p-2">
+    <img src={agw_listener}/>
+  </div>
+</div>
+
+:::info
+Unlike App Services, Azure Application Gateway does not require domain validation, so internal domains can be used here.
+:::
+
+### Routing rule
+
+Create a rule that ties all components together:
+
+<div className="flex justify-center mb-10">
+  <div className="w-[50%]">
+
+  | Setting | Value |
+  |---------|-------|
+  | Priority | 1 |
+  | Listener | `https` |
+  | Target type | Backend pool |
+  | Backend target | `root` |
+  | Backend settings | `defaultbackendsettings` |
+
+  **Path-based routing** — add one path rule per site:
+
+  | Setting | Value |
+  |---------|-------|
+  | Path | `/{site-slug}*` — the `*` is required to route all sub-paths |
+  | Target name | `{site-route-name}` |
+  | Backend setting name | `defaultbackendsettings` |
+  | Backend pool | `{site-backend-pool}` |
+
+  </div>
+  <div className="w-[50%] p-2">
+    <img src={agw_rule}/>
+  </div>
+</div>
+
+
+
