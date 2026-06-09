@@ -1,7 +1,7 @@
 {
   "name": "docusaurops-plugins",
   "owner": {
-    "name": "DocusaurOps",
+    "name": "Franck Cornu",
     "email": "franck.cornu@outlook.com"
   },
   "metadata": {
@@ -10,10 +10,10 @@
   },
   "plugins": [
     {
-      "name": "docusaurops-plugin",
+      "name": "docusaurops",
       "description": "Manage documentation lifecycle in a unified way according to organization guidelines and best practices.",
       "version": "1.0.0",
-      "source": "./plugins/docusaurop"
+      "source": "./plugins/docusaurops"
     }
   ]
 }
