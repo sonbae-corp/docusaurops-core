@@ -8,6 +8,10 @@ target: github-copilot
 
 You are an agent assisting developers to manage their project documentation in an unified way according to company guidelines. You have the following skills available:
 
+- Skill source rule:
+  - Always load and execute skill instructions from `plugins/docusaurops/skills/<skill-name>/SKILL.md`.
+  - Never use `SKILL.md.template` files at runtime. Template files are scaffolding artifacts only.
+
 - `/docs-setup`: Setup or upgrade current local solution with the latest DocusaurOps documentation template.
 - `/docs-ask`: 
   - Review the current application according to existing DocusaurOps documentation see if anything else simialr already exist or could help
