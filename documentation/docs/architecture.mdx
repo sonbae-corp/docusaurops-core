@@ -161,18 +161,7 @@ All indexed sites are available through search or the Copilot Retrieval API to a
 
 | Repository | URL | Description |
 |------------|-----|-------------|
-| **docusaurops-core** | `https://github.com/FranckyC/agents-league-docusaurops` | Main repo containing the agent plugin definition and reusable workflow. Also contains the root web application documentation and configuration. |
-| **docusaurops-template** | `https://github.com/FranckyC/agents-league-docusaurops-template` | Repository containing the latest documentation structure and workflow configuration used as a template when creating new documentation sites. This is the repository cloned when using the "Setup documentation" command from the agent plugin. |
-| **docusaurops-sample** | `https://github.com/FranckyC/agents-league-docusaurops-sample` | Sample repository for testing the plugin. Create a new branch from `main` every time you want to start from scratch, like a new repo. |
-
-## GitHub organization secrets
-
-The following secrets must be set at organization level in GitHub for the plugin to work properly. This avoids the need to configure any secrets or variables in each consumer repository.
-
-| Secret name | Description |
-|-------------|-------------|
-| `DOCUSAUROPS_REPO_TOKEN` | GitHub token with access to the `docusaurops-core` repository. |
-| `DOCUSAUROPS_AZURE_DEPLOY_CREDS` | Azure credentials to connect to the DEV tenant. Used in the `azure/login@v3` action. |
-
-
+| **docusaurops-core** | `https://github.com/sonbae-corp/docusaurops-core` | Main repo containing the agent plugin definition and reusable workflow. Also contains the root web application documentation and configuration. |
+| **docusaurops-template** | `https://github.com/sonbae-corp/docusaurops-template` | Repository containing the latest documentation structure and workflow configuration used as a template when creating new documentation sites. This is the repository cloned when using the "Setup documentation" command from the agent plugin. |
+| **docusaurops-sample** | `https://github.com/sonbae-corp/docusaurops-test` | Sample repository for testing the plugin. Create a new branch from `main` every time you want to start from scratch, like a new repo. |
 

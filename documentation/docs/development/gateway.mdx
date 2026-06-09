@@ -1,13 +1,13 @@
-import agw_backendpools from '../img/agw_backendpools.png';
-import agw_backendpool_edit from '../img/agw_backendpool_edit.png';
-import agw_custom_health_probe from '../img/agw_custom_health_probe.png';
-import agw_backend_settings from '../img/agw_backend_settings.png';
-import agw_listener from '../img/agw_listener.png';
-import agw_rule from '../img/agw_rule.png';
+// import agw_backendpools from '../img/agw_backendpools.png';
+// import agw_backendpool_edit from '../img/agw_backendpool_edit.png';
+// import agw_custom_health_probe from '../img/agw_custom_health_probe.png';
+// import agw_backend_settings from '../img/agw_backend_settings.png';
+// import agw_listener from '../img/agw_listener.png';
+// import agw_rule from '../img/agw_rule.png';
 
-import RedirectURL from '../img/root_webapp_redirect_url.png';
-import AuthProxyConvention from '../img/auth_proxy_convention.png';
-import RootWebAppAuth from '../img/root_webapp_auth.png';
+// import RedirectURL from '../img/root_webapp_redirect_url.png';
+// import AuthProxyConvention from '../img/auth_proxy_convention.png';
+// import RootWebAppAuth from '../img/root_webapp_auth.png';
 
 # Application Gateway Configuration
 
@@ -19,10 +19,10 @@ The root App Service is the web application that users hit when they navigate to
 
 1. Register a new Entra ID application.
 2. In the **Authentication** tab, add the redirect URL `https://docusaurops.internal.com/.auth/login/aad/callback` (web platform):
-
+{/* 
     <div className="flex justify-center mb-10">
         <img className="w-[60%]" src={RedirectURL}/>
-    </div>
+    </div> */}
 
 3. Make sure the **ID Tokens** flag is checked.
 
@@ -56,9 +56,9 @@ resource webAppConfig 'Microsoft.Web/sites/config@2022-09-01' = {
 
 To verify the settings are correctly applied, go to **Kudu → App settings**:
 
-<div className="flex justify-center mb-10">
+{/* <div className="flex justify-center mb-10">
     <img className="w-[60%]" src={AuthProxyConvention}/>
-</div>
+</div> */}
 
 :::warning
 As an alternative to forward proxy settings, you can configure a custom domain at both the gateway and App Service level. However, in company environments this is not possible because App Service custom domain validation requires public DNS resolution, which is unavailable for private domains like `*.internal.com`.
@@ -68,9 +68,9 @@ As an alternative to forward proxy settings, you can configure a custom domain a
 
 The web app is protected by an Entra ID application configured with default options:
 
-<div className="flex justify-center mb-10">
+{/* <div className="flex justify-center mb-10">
     <img className="w-[60%]" src={RootWebAppAuth}/>
-</div>
+</div> */}
 
 ---
 
@@ -80,14 +80,14 @@ The web app is protected by an Entra ID application configured with default opti
 
 The backend pools correspond to the web applications to integrate. Create two pools — one for the root web application and one for the solution architecture application — and select **App Services** as targets.
 
-<div className="flex space-x-2 justify-center mb-10">
-    <div className="w-[50%] p-2">
-      <img src={agw_backendpools}/>
-    </div>
-    <div className="w-[50%] p-2">
-      <img src={agw_backendpool_edit}/>
-    </div>
-</div>
+  {/* <div className="flex space-x-2 justify-center mb-10">
+      <div className="w-[50%] p-2">
+        <img src={agw_backendpools}/>
+      </div>
+      <div className="w-[50%] p-2">
+        <img src={agw_backendpool_edit}/>
+      </div>
+  </div> */}
 
 ### Health probes
 
@@ -113,7 +113,7 @@ Create a new health probe with the following settings:
   | Backend settings | (Assigned later) |
   </div>
   <div className="w-[50%] p-2">
-    <img   src={agw_custom_health_probe}/>
+    {/* <img   src={agw_custom_health_probe}/> */}
     </div>
 </div>
 
@@ -144,7 +144,7 @@ Create two backend settings — one for each application (`root` and `sa`) — w
 
   </div>
   <div className="w-[50%] p-2">
-    <img src={agw_backend_settings}/>
+    {/* <img src={agw_backend_settings}/> */}
   </div>
 </div>
 
@@ -166,7 +166,7 @@ Create a new listener for `docusaurops.internal.com` with the following paramete
 
   </div>
   <div className="w-[50%] p-2">
-    <img src={agw_listener}/>
+    {/* <img src={agw_listener}/> */}
   </div>
 </div>
 
@@ -200,7 +200,7 @@ Create a rule that ties all components together:
 
   </div>
   <div className="w-[50%] p-2">
-    <img src={agw_rule}/>
+    {/* <img src={agw_rule}/> */}
   </div>
 </div>
 

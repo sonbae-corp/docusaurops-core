@@ -55,7 +55,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v3
         with:
-          creds: ${{ secrets.DOCUSAUROPS_AZURE_DEPLOY_CRED }}
+          creds: ${{ secrets.DOCUSAUROPS_AZURE_DEPLOY_CREDS }}
           enable-AzPSSession: true
 
       - name: Deploy Azure infrastructure

@@ -6,9 +6,9 @@ toc_max_heading_level: 4
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-import VSCodePluginsSetting from './img/vscode_settings_plugins.png';
+// import VSCodePluginsSetting from './img/vscode_settings_plugins.png';
 
-import CopilotCLIPlugin from './img/copilot_cli_plugin.png';
+// import CopilotCLIPlugin from './img/copilot_cli_plugin.png';
 
 # Getting started with DocusaurOps
 
@@ -18,7 +18,7 @@ DocusaurOps is a GitHub Copilot plugin for Visual Studio Code and the GitHub Cop
 
 | Requirement | Notes |
 |-------------|-------|
-| [GitHub Copilot license]() | Required |
+| [GitHub Copilot license](https://github.com/features/copilot/plans) | Required |
 | [Visual Studio Code](https://code.visualstudio.com/) | Required |
 | [Git](https://git-scm.com/) | Required |
 | [GitHub CLI](https://cli.github.com/) | Recommended for CLI usage |
@@ -58,7 +58,7 @@ copilot
 ```
 
     <div className="flex justify-center mb-10">
-        <img className="w-[80%]" src={CopilotCLIPlugin}/>
+        {/* <img className="w-[80%]" src={CopilotCLIPlugin}/> */}
     </div>
 
 </TabItem>
@@ -67,13 +67,13 @@ copilot
 1. Open settings with `Ctrl+,`, search for `chat.pluginLocations`, and add the plugin path:
 
     <div className="flex justify-center mb-10">
-        <img className="w-[80%]" src={VSCodePluginsSetting}/>
+        {/* <img className="w-[80%]" src={VSCodePluginsSetting}/> */}
     </div>
 
 2. Restart VS Code and open a new Copilot chat. You should see the agent listed and ready to use:
 
     <div className="flex justify-center">
-        <img className="w-[40%]" src={DocusaurOpsAgentChatVsCode}/>
+        {/* <img className="w-[40%]" src={DocusaurOpsAgentChatVsCode}/> */}
     </div>
 
 </TabItem>
@@ -141,25 +141,3 @@ Asks questions about the content of all DocusaurOps sites using a custom search 
 | Skill | Description |
 |-------|-------------|
 | `docusaurops-azure-costing` | Determines infrastructure and operational costs from Bicep templates, producing a Markdown cost estimate with real-time CAD pricing from the Azure Retail Prices API. |
-
-#### `docusaurops-azure-costing`
-
-Analyzes a set of Bicep templates and generates a comprehensive Markdown cost estimate. It inventories every Azure resource (compute, storage, networking, AI services, private endpoints, etc.), fetches real-time **CAD** pricing from the [Azure Retail Prices API](https://learn.microsoft.com/en-us/rest/api/cost-management/retail-prices/azure-retail-prices), and produces a cost breakdown covering:
-
-- **Infrastructure costs** — fixed monthly charges for compute, data, platform services, and private endpoints.
-- **AI model costs** — usage-based charges scaled by workload assumptions (tokens, messages, users).
-- **Total monthly estimate** — a combined summary with cost drivers and optimization opportunities.
-
-> Always uses the **production path** when templates have conditional environment branches. Falls back to official Microsoft pricing pages or prompts the user when API results are unavailable.
-
-**Usage:**
-
-```bash
-/skill azure-costing "Daily active users: 1,382. Messages per user per day: ~5. Average input tokens per message: ~17,000. Average cached input tokens: ~7,500. Average output tokens per message: ~700." deploy/templates
-```
-
-**What happens:**
-1. Parses the workload assumptions from your arguments.
-2. Scans all `.bicep` files in the specified directory to catalog every deployed Azure resource.
-3. Queries the Azure Retail Prices API for current CAD pricing per resource.
-4. Asks for an output file path, then generates a detailed Markdown cost estimate with infrastructure costs, AI model costs, a total monthly estimate, and cost optimization strategies.

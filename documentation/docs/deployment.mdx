@@ -1,10 +1,11 @@
 import GhHostRepo from './img/create_host_gh_repo.png';
-// import GhHostRepoCode from './img/create_host_gh_repo_code.png';
+import GhHostRepoCode from './img/create_host_gh_repo_code.png';
 import GhTokenPermissions from './img/create_github_token_permissions.png';
 import GhRepoList from './img/gh_repo_list.png';
 import GhNewOrgSecret from './img/gh_new_org_secret.png';
 import GhOrgSecrets from './img/gh_org_secrets.png';
 import GhNewOrgVar from './img/gh_new_org_var.png';
+import GhRunCoreWorkflow from './img/gh_run_core_wf.png';
 
 Steps to reproduce this architecture in your organization:
 
@@ -14,19 +15,22 @@ The first operation to is to craete the required repostitories in your GitHub or
 
 ==> **"Core" repository**
 
-A repository to host the DocusaurOps core infrastructure code. It will be used to deploy the core platform in Azure. You can name it **"docusaurops-core"** for example. 
-Copy the content of the folder `/core` in this repository.
+A repository to host the DocusaurOps core infrastructure code. It will be used to deploy the core platform in Azure. You can name it **"docusaurops-core"** for example:
 
     <div className="flex justify-center mb-10">
         <img className="w-[50%]" src={GhHostRepo}/>
-        {/* <img className="w-[50%]" src={GhHostRepoCode}/> */}
+        {/* <img className="w-[50%]" src={GhHostRepoCode}/> */}</div>
+ - Copy the content of the folder `/core` and commit the changes.
+
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[50%]" src={GhHostRepoCode}/>
     </div>
 
 ==> **"Template" repository**
 
 A repository to host the documentation template. It will be used as a base when creating or upgrading documentation from a consumer repository through the plugin. You can name it **"docusaurops-template"** for example.
-Copy the content of the folder `/templates` in this repository.
-
+Copy the content of the folder `/templates` in this repository and commit the changes.
 
 ==> **"Test" repository**
 
@@ -177,6 +181,20 @@ Secrets:
 
 
 - Test deployment
+
+In the GitHub repository, go to Actions and run the `Deploy DocusaurOps Core Infrastructure` workflow of the main branch. 
+This will deploy the core infrastructure in Azure. 
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[50%]" src={GhRunCoreWorkflow}/>
+    </div>
+
+
+You can monitor the deployment progress in GitHub Actions and/or in the Azure Portal. The Azur edeployment is done via subcription deployment stack.
+
+:::info
+In production scenario, workflow trigger should be done on push to branches, loading corresponding environment variables.
+:::
 
 4. Create a new "Enterprise Websites" Copilot connector.
 

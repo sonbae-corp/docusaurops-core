@@ -91,11 +91,13 @@ try {
     #region Replace tokens in Bicep params template for new site
     Write-Verbose "Replacing tokens in Bicep params template...#"
 
+    $ENV_AZURE_DEPLOY_STACK_ENV_NAME = "docusaurops-$ENV_AZURE_ENV_NAME"
+
     $Tokens = @{
         ENV_AZURE_ENV_NAME = $ENV_AZURE_ENV_NAME
         ENV_AZURE_DEPLOY_LOCATION = $ENV_AZURE_DEPLOY_LOCATION
-        ENV_AZURE_DEPLOY_RESOURCE_PREFIX = $ENV_AZURE_DEPLOY_RESOURCE_PREFIX
-        ENV_AZURE_DEPLOY_STACK_RG_NAME = $ENV_AZURE_DEPLOY_STACK_RG_NAME
+        ENV_AZURE_DEPLOY_RESOURCE_PREFIX = "docusaurops"
+        ENV_AZURE_DEPLOY_STACK_RG_NAME = "rg-$ENV_AZURE_DEPLOY_STACK_ENV_NAME"
         APP_NAME = $AppName
         APP_PATH = $AppPath
         ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID = $ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID

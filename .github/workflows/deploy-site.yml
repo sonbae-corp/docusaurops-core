@@ -53,14 +53,11 @@ jobs:
       ENV_AZURE_DEPLOY_RESOURCE_PREFIX: ${{ steps.vars.outputs.ENV_AZURE_DEPLOY_RESOURCE_PREFIX }}
       ENV_AZURE_DEPLOY_TENANT_ID: ${{ steps.vars.outputs.ENV_AZURE_DEPLOY_TENANT_ID }}
       ENV_AZURE_ENV_NAME: ${{ steps.vars.outputs.ENV_AZURE_ENV_NAME }}
-      ENV_AZURE_DEPLOY_STACK_RG_NAME: ${{ steps.vars.outputs.ENV_AZURE_DEPLOY_STACK_RG_NAME }}
       ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID: ${{ steps.vars.outputs.ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID }}
       ENV_AZURE_DOCUSAUROPS_SITE_URL: ${{ steps.vars.outputs.ENV_AZURE_DOCUSAUROPS_SITE_URL }}
       ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME: ${{ steps.vars.outputs.ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME }}
       ENV_AZURE_DOCUSAUROPS_DOMAIN: ${{ steps.vars.outputs.ENV_AZURE_DOCUSAUROPS_DOMAIN }}
       ENV_AZURE_DOCUSAUROPS_COPILOT_CONNECTOR_ID: ${{ steps.vars.outputs.ENV_AZURE_DOCUSAUROPS_COPILOT_CONNECTOR_ID }}
-      ENV_AZURE_DEPLOY_SUBNET_URI_FOR_PRIVATE_ENDPOINTS: ${{ steps.vars.outputs.ENV_AZURE_DEPLOY_SUBNET_URI_FOR_PRIVATE_ENDPOINTS }}
-      ENV_AZURE_DEPLOY_SUBNET_URI_FOR_APP_SERVICE: ${{ steps.vars.outputs.ENV_AZURE_DEPLOY_SUBNET_URI_FOR_APP_SERVICE }}
     steps:
       - name: Load DocusaurOps environment variables
         shell: bash
@@ -82,7 +79,6 @@ jobs:
         run: |
           echo "ENV_AZURE_DEPLOY_LOCATION=$ENV_AZURE_DEPLOY_LOCATION" >> $GITHUB_OUTPUT
           echo "ENV_AZURE_ENV_NAME=$ENV_AZURE_ENV_NAME" >> $GITHUB_OUTPUT
-          echo "ENV_AZURE_DEPLOY_STACK_RG_NAME=$ENV_AZURE_DEPLOY_STACK_RG_NAME" >> $GITHUB_OUTPUT
           echo "ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID=$ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID" >> $GITHUB_OUTPUT
           echo "ENV_AZURE_DOCUSAUROPS_SITE_URL=$ENV_AZURE_DOCUSAUROPS_SITE_URL" >> $GITHUB_OUTPUT
           echo "ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME=$ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME" >> $GITHUB_OUTPUT
@@ -97,12 +93,8 @@ jobs:
       ENV_AZURE_DEPLOY_WEBAPP_NAME: ${{ steps.deployAzureStack.outputs.ENV_AZURE_DEPLOY_WEBAPP_NAME }}
     env:
       ENV_AZURE_DEPLOY_LOCATION: ${{ needs.init.outputs.ENV_AZURE_DEPLOY_LOCATION }}
-      ENV_AZURE_DEPLOY_RESOURCE_PREFIX: ${{ needs.init.outputs.ENV_AZURE_DEPLOY_RESOURCE_PREFIX }}
       ENV_AZURE_ENV_NAME: ${{ needs.init.outputs.ENV_AZURE_ENV_NAME }}
-      ENV_AZURE_DEPLOY_STACK_RG_NAME: ${{ needs.init.outputs.ENV_AZURE_DEPLOY_STACK_RG_NAME }}
       ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID: ${{ needs.init.outputs.ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID }}
-      ENV_AZURE_DOCUSAUROPS_SITE_URL: ${{ needs.init.outputs.ENV_AZURE_DOCUSAUROPS_SITE_URL }}
-      ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME: ${{ needs.init.outputs.ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME }}
     steps:
       - name: Checkout DocusaurOps repo
         uses: actions/checkout@v4
@@ -129,7 +121,7 @@ jobs:
       - name: Azure Login
         uses: azure/login@v3
         with:
-          creds: ${{ secrets.DOCUSAUROPS_AZURE_DEPLOY_CRED }}
+          creds: ${{ secrets.DOCUSAUROPS_AZURE_DEPLOY_CREDS }}
           enable-AzPSSession: true
 
       - name: Deploy deployment stack for new site
@@ -186,7 +178,7 @@ jobs:
     needs: [init,deploy,build]
     env:
       ENV_AZURE_DEPLOY_WEBAPP_NAME: ${{ needs.deploy.outputs.ENV_AZURE_DEPLOY_WEBAPP_NAME }}
-      ENV_AZURE_DEPLOY_STACK_RG_NAME: ${{ needs.init.outputs.ENV_AZURE_DEPLOY_STACK_RG_NAME }}
+      ENV_AZURE_DEPLOY_STACK_RG_NAME: "rg-docusaurops-${{ needs.init.outputs.ENV_AZURE_ENV_NAME }}"
     steps:   
       - name: Checkout
         uses: actions/checkout@v4

@@ -25,7 +25,7 @@ const config: Config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'FranckyC', // Usually your GitHub org/user name.
-  projectName: 'agents-league-docusaurops', // Usually your repo name.
+  projectName: 'docusaurops', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -76,7 +76,6 @@ const config: Config = {
       },
       items: [
         {to: 'docs/getting_started', label: 'Getting started', position: 'left'}, 
-        {to: '/search', label: 'Search', position: 'left'}, 
         {
           href: 'https://github.com/FranckyC/agents-league-docusaurops',
           position: 'right',
