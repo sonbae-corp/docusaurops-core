@@ -67,7 +67,7 @@ jobs:
   deploy_root_site:
         
         name: Deploy root site in DocusaurOps
-        needs: deploy_core
+       # needs: deploy_core
         uses: ./.github/workflows/deploy-site.yml
         with:
             app-name: ${{ 'root' }}
