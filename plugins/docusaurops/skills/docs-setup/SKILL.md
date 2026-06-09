@@ -51,6 +51,7 @@ Argument-to-variable mapping:
    - `ENV_PROJECT_CONTACT` (optional): Contact email (e.g. `contact@example.com`). Infer from current logged-in user if missing.
    - `ENV_PROJECT_TECHNOLOGIES` (optional): Comma-separated technologies (max 4) (e.g. `JavaScript, Node.js, React`). Infer from solution if missing.
 
+
 6. Write values to `/documentation/.env.docusaurops`.
    If `.env.docusaurops` already exists, merge with existing values and ask the user to confirm before saving.
 
@@ -58,6 +59,7 @@ Argument-to-variable mapping:
    - `[[ENV_SITE_TITLE]]` → value of `ENV_SITE_TITLE`
    - `[[ENV_BASE_URL]]` → value of `ENV_BASE_URL`
    - `[[ENV_DOC_PATH]]` → documentation folder name chosen by the user (default: `documentation`, no leading/trailing slashes)
+   - `[[ENV_DOCUSAUROPS_HOST_REPO]]` → Repository hosting DocusaurOps (default: `sonbae-corp/docusaurops-core`).
 
 8. Run in `/documentation` (or folder name set by the user):
    ```
