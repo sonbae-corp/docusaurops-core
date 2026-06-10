@@ -283,6 +283,8 @@ try {
         } catch {
             Write-Warning "Failed to update root site ENV_SITE_URLS: $($_.Exception.Message)"
         }
+    } else {
+        Write-Warning "Skipping root site ENV_SITE_URLS update because ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME or ENV_AZURE_DOCUSAUROPS_DOMAIN is not set."
     }
     #endregion
 
