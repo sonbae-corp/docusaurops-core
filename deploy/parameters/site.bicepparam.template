@@ -10,4 +10,5 @@ param rgName = '{{ENV_AZURE_DEPLOY_STACK_RG_NAME}}'
 param appName = '{{APP_NAME}}'
 param appBasePath = '{{APP_PATH}}'
 
+param enableAuthentication = {{ENV_SITE_ENABLE_AUTHENTICATION}}
 param entraIdClientId = '{{ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID}}'

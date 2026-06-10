@@ -59,6 +59,7 @@ Argument-to-variable mapping:
    - `[[ENV_BASE_URL]]` → value of `ENV_BASE_URL`
    - `[[ENV_DOC_PATH]]` → documentation folder name chosen by the user (default: `documentation`, no leading/trailing slashes)
    - `[[ENV_DOCUSAUROPS_HOST_REPO]]` → Repository hosting DocusaurOps (default: `sonbae-corp/docusaurops-core`).
+   - `[[ENV_ENABLE_AUTH]]` → `true` or `false` (default) based on user choice regarding the authentication for the documentation site. User has to explicity choose to enable authentication if required.
 
 8. Run in `/documentation` (or folder name set by the user):
    ```

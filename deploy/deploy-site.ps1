@@ -34,7 +34,10 @@ Param (
     [string]$AppPath,
 
     [Parameter(Mandatory = $False)]
-    [switch]$Manual
+    [switch]$Manual,
+
+    [Parameter(Mandatory = $False)]
+    [bool]$EnableAuthentication = $true
 )
 
 . $PSScriptRoot/scripts/Login-Azure.ps1
@@ -102,7 +105,8 @@ try {
         ENV_AZURE_DEPLOY_STACK_RG_NAME = "rg-$ENV_AZURE_DEPLOY_STACK_ENV_NAME"
         APP_NAME = $AppName
         APP_PATH = $AppPath
-        ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID = $ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID
+        ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID = if ($EnableAuthentication) { $ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID } else { "" }
+        ENV_SITE_ENABLE_AUTHENTICATION = $EnableAuthentication.ToString().ToLower()
     }
                 
     $inputFilePath = Join-Path -Path $PSScriptRoot -ChildPath "./parameters/site.bicepparam.template"
@@ -138,7 +142,7 @@ try {
     #endregion
 
     #region Add EasyAuth redirect URI to Entra ID app registration
-    if (-not [string]::IsNullOrEmpty($ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID)) {
+    if ($EnableAuthentication -and -not [string]::IsNullOrEmpty($ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID)) {
         try {
             $callbackPath = if (-not [string]::IsNullOrEmpty($AppPath) -and $AppPath -ne "/") { "/$AppPath/.auth/login/aad/callback" } else { "/.auth/login/aad/callback" }
             $newRedirectUri = "https://$ENV_AZURE_DOCUSAUROPS_DOMAIN$callbackPath"

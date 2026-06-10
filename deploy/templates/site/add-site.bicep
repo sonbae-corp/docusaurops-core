@@ -18,6 +18,9 @@ param appName string
 @description('Base URL path for the app (e.g., "docs" for /docs)')
 param appBasePath string = ''
 
+@description('Enable authentication on the site')
+param enableAuthentication bool = true
+
 @description('Entra ID (Azure AD) application client ID for EasyAuth')
 param entraIdClientId string = ''
 
@@ -57,6 +60,7 @@ module addSiteResources './add-site-resources.bicep' = {
     logsStorageAccountName: logsStorageAccountName
     appInsightsName: appInsightsName
     keyVaultName: keyVaultName
+    enableAuthentication: enableAuthentication
     entraIdClientId: entraIdClientId
     entraIdTenantId: entraIdTenantId
   }

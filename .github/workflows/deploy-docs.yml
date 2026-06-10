@@ -15,6 +15,11 @@ on:
         description: 'URL path for the app (without leading or trailing slash, e.g., "my-app")'
         required: false
         type: string
+      enable-auth:
+        description: 'Enable authentication on the site'
+        required: false
+        type: boolean
+        default: false
       action:
         description: 'Action to perform: deploy or rollback'
         required: false
@@ -37,5 +42,6 @@ jobs:
         with:
             app-name: ${{ inputs.app-name || 'root' }}
             action: ${{ inputs.action || 'deploy' }}
+            enable-auth: ${{ inputs.enable-auth || true }}
             documentation-path: 'documentation'
         secrets: inherit

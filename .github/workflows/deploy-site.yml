@@ -17,6 +17,11 @@ on:
         required: false
         type: string
         default: '/'
+      enable-auth:
+        description: 'Enable authentication on the site'
+        required: false
+        type: boolean
+        default: false
       action:
         description: 'Action to perform: deploy or rollback'
         required: false
@@ -130,10 +135,11 @@ jobs:
         id: deployAzureStack
         run: |
           $appPath = '${{ inputs.app-path }}'
+          $enableAuth = '${{ inputs.enable-auth }}' -eq 'true'
           if ($appPath -and $appPath -ne '/') {
-            ./deploy/deploy-site.ps1 -Env CI -AppName '${{ inputs.app-name }}' -AppPath $appPath -Verbose
+            ./deploy/deploy-site.ps1 -Env CI -AppName '${{ inputs.app-name }}' -AppPath $appPath -EnableAuthentication $enableAuth -Verbose
           } else {
-            ./deploy/deploy-site.ps1 -Env CI -AppName '${{ inputs.app-name }}' -Verbose
+            ./deploy/deploy-site.ps1 -Env CI -AppName '${{ inputs.app-name }}' -EnableAuthentication $enableAuth -Verbose
           }
           echo "ENV_AZURE_DEPLOY_WEBAPP_NAME=$env:ENV_AZURE_DEPLOY_WEBAPP_NAME" >> $env:GITHUB_OUTPUT
           echo "ENV_AZURE_DOCUSAUROPS_SITE_URL=$env:ENV_AZURE_DOCUSAUROPS_SITE_URL" >> $env:GITHUB_OUTPUT

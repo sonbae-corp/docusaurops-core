@@ -22,6 +22,9 @@ param applicationInsightsResourceId string
 @description('Base URL path for the app (e.g., "docs" for /docs)')
 param appBasePath string = ''
 
+@description('Enable authentication on the site')
+param enableAuthentication bool = true
+
 @description('Key Vault name for secret references')
 param keyVaultName string = ''
 
@@ -32,7 +35,7 @@ param entraIdClientId string = ''
 param entraIdTenantId string = subscription().tenantId
 
 var webAppHostUrl = 'https://${siteName}.azurewebsites.net'
-var entraIdEnabled = !empty(entraIdClientId)
+var entraIdEnabled = enableAuthentication && !empty(entraIdClientId)
 
 resource userAssignedIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' existing = {
   name: last(split(userAssignedIdentityResourceId, '/'))
@@ -106,23 +109,23 @@ resource authSettings 'Microsoft.Web/sites/config@2023-12-01' = {
   dependsOn: [webApp]
   properties: {
     httpSettings: {
-      requireHttps: true
+      requireHttps: enableAuthentication
       routes: {
-        apiPrefix: !empty(appBasePath) ? '/${appBasePath}/.auth' : '/.auth'
+        apiPrefix: enableAuthentication ? (!empty(appBasePath) ? '/${appBasePath}/.auth' : '/.auth') : ''
       }
-      forwardProxy: {
+      forwardProxy: enableAuthentication ? {
         convention: 'Custom'
         customHostHeaderName: 'X-Original-Host'
-      }
+      } : null
     }
-    login: {
+    login: enableAuthentication ? {
       allowedExternalRedirectUrls: [
         !empty(appBasePath) ? '${webAppHostUrl}/${appBasePath}/.auth/login/aad/callback' : '${webAppHostUrl}/.auth/login/aad/callback'
       ]
       tokenStore: {
         enabled: true
       }
-    }
+    } : null
     platform: {
       enabled: entraIdEnabled
     }
