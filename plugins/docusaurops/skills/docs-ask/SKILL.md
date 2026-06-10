@@ -14,7 +14,7 @@ Read the question argument provided by the user.
 
 ## Procedure
 
-1. Using the `workiq_mcp_M365Copilot` MCP server, use the tool `copilot_chat` tool to retrieve content from DocusaurOps Graph Connector. 
+1. Using the `workiq_mcp_M365Copilot` MCP server to retrieve content from DocusaurOps Graph Connector. 
 2. Provide a clear answer to the user based on the content retreived from step 1. Always provide exact source reference links in your answers. 
 3. If the content retrieved is insufficient to provide a clear answer, use web search to find an answer.
 
