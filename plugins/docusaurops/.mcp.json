@@ -4,9 +4,10 @@
 		"url": "https://agent365.svc.cloud.microsoft/agents/tenants/d7e957c6-c0d2-4ee3-88d5-bf5c0a56268b/servers/mcp_WordServer",
 		"type": "http"
 	},
-	"workiq_mcp_M365Copilot": {
-		"url": "https://agent365.svc.cloud.microsoft/agents/tenants/d7e957c6-c0d2-4ee3-88d5-bf5c0a56268b/servers/mcp_M365Copilot",
-		"type": "http"
+	"workiq_cli": {
+		"command": "npx",
+		"args": ["-y", "@microsoft/workiq@latest", "mcp"],
+		"tools": ["*"]
 	}
   }
 }
