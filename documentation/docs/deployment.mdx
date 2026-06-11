@@ -281,7 +281,11 @@ Before publishing plugin files in GitHub marketplace, resolve template tokens.
 From repository root, run:
 
 ```powershell
-./plugins/init-plugin.ps1 -Tokens @{ ENV_AZURE_DEPLOY_TENANT_ID = "00000000-0000-0000-0000-000000000000"; ENV_DOCUSAUROPS_HOST_REPO = "your-org/docusaurops-core" } -Verbose
+./plugins/init-plugin.ps1 -Tokens @{ `
+    ENV_AZURE_DEPLOY_TENANT_ID = "00000000-0000-0000-0000-000000000000"; `
+    ENV_DOCUSAUROPS_HOST_REPO = "your-org/docusaurops-core"; `
+    ENV_DOCUSAUROPS_ROOT_SITE_URL = "https://your-org-root-site"} `
+    -Verbose 
 ```
 
 This command replaces tokens in `.template` files and generates final plugin files.

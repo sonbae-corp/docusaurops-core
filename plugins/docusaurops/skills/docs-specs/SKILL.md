@@ -38,7 +38,7 @@ Extract feature requirements from a Word document, generate one specification fi
 
 1. Read source document
 
-- Use the Word MCP tool to read the document from `requirement_document_path`.
+- Use the Word MCP tool `workiq_mcpWordServer` server from `.mcp.json` to read the document from `requirement_document_path`.
 - Parse all functional requirements, constraints, assumptions, and acceptance criteria.
 
 2. Build feature list
@@ -68,16 +68,15 @@ Extract feature requirements from a Word document, generate one specification fi
 5. Create GitHub issues
 
 - Reuse `target_project` if provided.
-- If no project exists, create a new project in the current repository context.
-- Create one issue per generated spec.
+- Using the `github-mcp-server` MCP server, create one issue per generated spec.
 - Issue content should be a condensed implementation summary, not the full spec.
-- Include a link to the full specification markdown file in the documentation.
+- Include a link to the full specification page in the published DocusaurOps site. To determine the URL, use the environment variables `ENV_DOCUSAUROPS_ROOT_SITE_URL` and `ENV_BASE_URL` from the `.env.docusaurops` file to construct the project URL (ex: `https://{{ENV_DOCUSAUROPS_ROOT_SITE_URL}}/{{ENV_BASE_URL}}/specs/<feature-spec-based-on-file-name>`).
 
 ## Output Requirements
 
 - One spec file per feature in `/documentation/docs`.
 - One GitHub issue per spec.
-- Every issue links to exactly one full spec.
+- Every issue links to exactly one full spec based on the DocusaurOps documentation site.
 - Missing information is tracked in both the Word doc comments and spec placeholders.
 
 ## Quality Checklist
@@ -87,5 +86,3 @@ Extract feature requirements from a Word document, generate one specification fi
 - Acceptance criteria are explicit and testable.
 - Issues are concise and actionable.
 - Documentation links are valid.
-
-

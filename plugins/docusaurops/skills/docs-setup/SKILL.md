@@ -50,6 +50,7 @@ Argument-to-variable mapping:
    - `ENV_PROJECT_DESCRIPTION` (optional): Short project description (e.g. `This project is a sample documentation site.`). Infer from solution or use a placeholder.
    - `ENV_PROJECT_CONTACT` (optional): Contact email (e.g. `contact@example.com`). Infer from current logged-in user if missing.
    - `ENV_PROJECT_TECHNOLOGIES` (optional): Comma-separated technologies (max 4) (e.g. `JavaScript, Node.js, React`). Infer from solution if missing.
+   - `ENV_PROJECT_DOCUSAUROPS_ROOT_SITE_URL` (optional): Absolute URL of the documentation site (e.g. `https://docs.example.com/my-project-docs`) for that project. Use the value `{{ENV_DOCUSAUROPS_ROOT_SITE_URL}}` as host name.
 
 6. Write values to `/documentation/.env.docusaurops`.
    If `.env.docusaurops` already exists, merge with existing values and ask the user to confirm before saving.

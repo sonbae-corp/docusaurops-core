@@ -4,77 +4,109 @@ sidebar_position: 1
 toc_max_heading_level: 4
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-## Transform Your Organizational Knowledge Into a Strategic Asset
+<div className="not-prose mb-10 rounded-2xl overflow-hidden border border-[var(--ifm-table-border-color)] bg-[linear-gradient(135deg,rgba(32,201,151,0.12),rgba(91,141,255,0.10))]">
+  <div className="px-8 py-10">
+    <p className="text-[0.75rem] font-bold tracking-[0.12em] uppercase text-[var(--ifm-color-primary)] mb-3">The Knowledge Platform for Engineering Teams</p>
+    <h1 className="text-4xl font-bold leading-tight mb-4" style={{fontFamily:"'Space Grotesk',sans-serif"}}>Transform Your Organizational Knowledge<br/>Into a Strategic Asset</h1>
+    <p className="text-lg text-[var(--ifm-font-color-secondary)] max-w-2xl leading-relaxed">DocusaurOps combines a GitHub Copilot plugin, infrastructure automation, and a shared hosting platform so any team can go from zero to a live, searchable documentation site — in minutes.</p>
+  </div>
+</div>
 
-In most organizations, technical knowledge is everywhere… and nowhere. Documentation lives in scattered SharePoint sites, forgotten repositories, personal drives, outdated PDFs, orphaned Word files, and Markdown pages no one knows exist. Teams waste time searching, duplicating work, or—worse—rebuilding knowledge that was already created but impossible to find.
+## The Problem Worth Solving
+
+In most organizations, technical knowledge is everywhere… and nowhere. Documentation lives in scattered SharePoint sites, forgotten repositories, personal drives, outdated PDFs, orphaned Word files, and Markdown pages no one knows exist.
 
 The result is predictable:
 
-poor visibility, zero discoverability, inconsistent formats, and no single source of truth. Documentation becomes a burden, done at the end of projects, rushed, unstructured, and quickly obsolete. Valuable expertise disappears when people leave, and organizational "savoir-faire" slowly erodes.
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  {[
+    { icon: "🔍", label: "Zero discoverability" },
+    { icon: "📋", label: "Inconsistent formats" },
+    { icon: "🧩", label: "No single source of truth" },
+    { icon: "💸", label: "Growing documentation debt" },
+    { icon: "🚪", label: "Knowledge lost when people leave" },
+    { icon: "⏳", label: "Teams rebuilding what already exists" },
+  ].map(({ icon, label }) => (
+    <div key={label} className="flex items-center gap-3 rounded-xl border border-[var(--ifm-table-border-color)] px-4 py-3 bg-[var(--ifm-background-surface-color)]">
+      <span className="text-xl">{icon}</span>
+      <span className="text-sm font-medium text-[var(--ifm-font-color-secondary)]">{label}</span>
+    </div>
+  ))}
+</div>
 
-But it doesn't have to be this way.
+Documentation becomes a burden — done at the end of projects, rushed, unstructured, and quickly obsolete. Your organization loses time, efficiency, and expertise every single day.
 
-## Imagine a World Where Documentation Actually Works for You
+---
 
-A world where:
+## Imagine Documentation That Works for You
 
-- All technical documentation—regardless of format—is centralized, searchable, and accessible.
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  {[
+    { icon: "🗂️", text: "All technical documentation centralized, searchable, and accessible — regardless of format." },
+    { icon: "⚡", text: "Teams instantly find what they need without guessing where to look." },
+    { icon: "🔄", text: "Knowledge structured, consistent, and maintained over time." },
+    { icon: "🤝", text: "Technical teams, BAs, security, and stakeholders share a common reference point." },
+  ].map(({ icon, text }) => (
+    <div key={text} className="flex gap-3 rounded-xl border border-[rgba(32,201,151,0.35)] px-4 py-4 bg-[rgba(32,201,151,0.05)]">
+      <span className="text-2xl shrink-0">{icon}</span>
+      <p className="text-sm leading-relaxed text-[var(--ifm-font-color-base)] m-0">{text}</p>
+    </div>
+  ))}
+</div>
 
-- Teams instantly find what they need without guessing where to look.
+This is what modern docs-as-code practices and platforms like Docusaurus make possible — when implemented with a real organizational strategy, not just per-project effort.
 
-- Knowledge is structured, consistent, and maintained over time.
+:::tip The Mindset Shift
+Great documentation isn't a chore — it's an investment.
 
-- Documentation becomes a strategic asset, not an afterthought.
-
-- Technical teams, business analysts, security, and stakeholders finally share a common reference point.
-
-This is what modern documentation‑as‑code practices and platforms like Docusaurus make possible—when they're implemented with a real organizational strategy, not just per‑project effort.
-
-## Why This Matters?
-
-When documentation is done right, it becomes the backbone of your enterprise's expertise. It accelerates onboarding, reduces project friction, prevents knowledge loss, and strengthens collaboration across teams.
-
-When it's done poorly—or not at all—you get:
-
--Knowledge scattered across disconnected systems
-
-- Heterogeneous formats that are hard to read or maintain
-
-- Zero visibility across teams
-
-- No unified reference point
-
-A growing “documentation debt” that slows everyone down
-
-In short: your organization loses time, efficiency, and knowledge every single day.
-
-🧭 The Mindset Shift
-Great documentation isn't a chore. It's an investment.
-
-"Write your documentation as if you had to explain what you've done to yourself.
-You'll thank yourself six months later."
+*"Write your documentation as if you had to explain what you've done to yourself. You'll thank yourself six months later."*
 
 Your teams will thank you too.
+:::
 
-## What DocusaurOps offers:
+---
 
-TODO: AI benefit here.
+## How DocusaurOps Makes This Real
 
-- ✅ A single access point materialized by a internal website aggregating content coming from your own documentation sites.
-- ✅ A streamlined approach to build your documentation site using Docusaurus and Markdown content. All you need is to install the GitHub Copilot plugin "DocusaurOps" and say "Setup documentation". Follow the instructions and DocusaurOps handle the rest for you (creating the website, deploying it, configuring CI pipelines, etc.).
-- ✅ A unified search capability to surface your content more easily and make it discoverable to others: by using an unique website URL, we are able to crawl all the content agregated underneath. It means with DocusaurOps, your documentation site gets a free search feature. 
-- ✅ What to search an information about an existing project? Remember you did this somewhere but don't know where? Just ask the DocusaurOps agent! All sites created with DocusaurOps get their content indexed and available for search through the agent. You can ask it questions like "Where is the documentation about project X?" or "What are the best practices for Y?" and it will provide you with relevant information from all the content available on DocusaurOps.
+<Tabs>
+  <TabItem value="setup" label="🚀 Get started in minutes" default>
 
-## What benefits?
+Install the GitHub Copilot plugin, tell the agent:
 
-- 🎯 Improves teams efficiency by encouraging them to quickly create appealing technical documentation consumed as web format. No complex configurations, hosting setup or authentication. DocusaurOps is Ready to go!
-- 🎯 Improves knowledge sharing and content discoverability across an organization via an unified search capability and a dedicated agent right in your work tool (Copilot CLI/Visual Studio code).
-- 🎯 Provides a single reference point for users to access technical documentation across the company, improving visibility and accessibility of content. No more Word documents lost in a random SharePoint library. All you need is accessible easily with up to date content thanks to documentation as code.
-- 🎯 Reduces the barrier to entry for teams to create and maintain technical documentation by providing a streamlined approach leveraging Markdown and Docusaurus. No need to worry about hosting, deployment, authentication or complex configuration. DocusaurOps handles all of that for you.
+```
+"Setup documentation for my project"
+```
 
-## What DocusaurOps doesn't include?
+DocusaurOps handles the rest — scaffolding the Docusaurus site, deploying it to the shared platform, and wiring up the CI/CD pipeline. No hosting setup, no authentication configuration, no manual pipeline authoring.
 
-- ❌ **Permissions management system**: DocusaurOps does not provide any permisions management mechanism. If you wish to publish your content through the platform, we assume the content is suitable for internal usage as the gooal is to share knowledge across teams, not hide it from them.
-- ❌ **Content ownership**: Teams are responsible for their own content and need to make sure it can be published and not disclose any private or confidential information.
-- ❌ **Application hosting**: Except fron your documentation, we don't host any custom application. This is not a free hosting service for your own projects.
+  </TabItem>
+  <TabItem value="search" label="🔎 Unified search">
+
+Every site created with DocusaurOps is automatically crawled and indexed under a single URL. Your documentation gets a free, organization-wide search — no configuration required.
+
+  </TabItem>
+  <TabItem value="agent" label="🤖 Ask the agent">
+
+All indexed content is made available through the **DocusaurOps agent**, directly in **Copilot CLI and VS Code**. Ask questions like:
+
+- *"Where is the documentation for project X?"*
+- *"What are the best practices for Y?"*
+- *"Who owns the runbook for Z?"*
+
+And get instant answers sourced from all content across the organization.
+
+  </TabItem>
+</Tabs>
+
+---
+
+:::note Scope & Limitations
+| Topic | What to expect |
+|---|---|
+| **Permissions** | No access control system. Content published is assumed suitable for broad internal sharing. |
+| **Content ownership** | Teams are responsible for their own content — ensure nothing confidential is published. |
+| **Hosting scope** | Documentation sites only. DocusaurOps is not a general-purpose hosting platform. |
+:::
