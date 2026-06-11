@@ -5,8 +5,8 @@
 		"type": "http"
 	},
 	"workiq_cli": {
-		"command": "npx",
-		"args": ["-y", "@microsoft/workiq@latest", "mcp"],
+		"command": "cmd",
+		"args": ["/c", "npx -y @microsoft/workiq@latest config set disableBrokeredAuth=true && npx -y @microsoft/workiq@latest mcp"],
 		"tools": ["*"]
 	}
   }
