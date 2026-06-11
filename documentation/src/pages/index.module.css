@@ -1,23 +1,367 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
-.heroBanner {
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+  padding-bottom: 3rem;
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(2rem, 4vw, 3.6rem) clamp(1rem, 4vw, 3rem) clamp(3rem, 7vw, 5.8rem);
+}
+
+.heroGlow {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: radial-gradient(circle at 12% 10%, rgba(32, 201, 151, 0.22), transparent 40%),
+    radial-gradient(circle at 85% 28%, rgba(91, 141, 255, 0.24), transparent 44%),
+    linear-gradient(145deg, #050b1d 10%, #12254f 58%, #0a1a3d 100%);
+}
+
+.heroInner {
+  max-width: 1220px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1.3rem;
+}
+
+.heroTitleRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.heroTitleRow .heroTitle {
+  flex: 1;
+  min-width: 0;
+}
+
+.hackathonBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(90deg, #7c3aed22, #2563eb22);
+  border: 1px solid #7c3aed66;
+  color: #a78bfa;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  margin-bottom: 1.25rem;
+  text-decoration: none;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.hackathonBadge:hover {
+  background: linear-gradient(90deg, #7c3aed44, #2563eb44);
+  border-color: #7c3aedaa;
+  text-decoration: none;
+}
+
+.heroKicker {
+  display: inline-flex;
+  width: fit-content;
+  margin: 0;
+  border: 1px solid rgba(195, 208, 238, 0.48);
+  color: #dce7ff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border-radius: 999px;
+  padding: 0.32rem 0.72rem;
+}
+
+.heroTitle {
+  margin: 0;
+  max-width: 18ch;
+  color: #f7fbff;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 4.2vw, 4.3rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.heroLead {
+  margin: 0;
+  max-width: 66ch;
+  color: #c4d0ea;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.72;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+}
+
+.primaryButton,
+.ghostButton {
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 700;
+  padding: 0.78rem 1.2rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.primaryButton {
+  color: #04111c;
+  background: linear-gradient(120deg, #72dfbf, #20c997);
+  box-shadow: 0 16px 28px rgba(32, 201, 151, 0.27);
+}
+
+.ghostButton {
+  color: #dce7ff;
+  border: 1px solid rgba(195, 208, 238, 0.6);
+  background: rgba(5, 12, 30, 0.5);
+}
+
+.primaryButton:hover,
+.ghostButton:hover {
+  transform: translateY(-1px);
+}
+
+.primaryButton:hover {
+  box-shadow: 0 20px 32px rgba(32, 201, 151, 0.35);
+}
+
+.ghostButton:hover {
+  border-color: #f7fbff;
+}
+
+.terminalFrame {
+  max-width: 760px;
+  margin-top: 0.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(183, 241, 221, 0.35);
+  background: rgba(2, 8, 22, 0.76);
+  box-shadow: 0 24px 42px rgba(2, 8, 24, 0.48);
+  overflow: hidden;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.terminalTopBar {
+  border-bottom: 1px solid rgba(195, 208, 238, 0.2);
+  padding: 0.7rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.terminalTopBar span {
+  width: 0.62rem;
+  height: 0.62rem;
+  border-radius: 999px;
+  background: #64799f;
+}
+
+.terminalTopBar span:first-child {
+  background: #ff5f56;
+}
+
+.terminalTopBar span:nth-child(2) {
+  background: #ffbd2e;
+}
+
+.terminalTopBar span:nth-child(3) {
+  background: #27c93f;
+}
+
+.terminalTopBar p {
+  margin: 0 0 0 auto;
+  color: #8da3cf;
+  font-size: 0.78rem;
+  text-transform: lowercase;
+  letter-spacing: 0.08em;
+}
+
+.terminalBody {
+  padding: 0.9rem 1rem;
+}
+
+.terminalBody p {
+  margin: 0;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(195, 208, 238, 0.14);
+  color: #eef5ff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.81rem;
+  line-height: 1.68;
+}
+
+.terminalBody p:last-child {
+  border-bottom: none;
+}
+
+.terminalBody p span {
+  color: #72dfbf;
+  margin-right: 0.4rem;
+}
+
+.heroBrandMark {
+  position: absolute;
+  right: clamp(1rem, 4vw, 3rem);
+  top: 1.4rem;
+}
+
+.heroLogo {
+  width: clamp(100px, 12vw, 160px);
+  opacity: 0.92;
+}
+
+.pillarSection,
+.cardSection,
+.ctaSection {
+  padding: 0 clamp(1rem, 4vw, 3rem);
+}
+
+.pillarGrid,
+.sectionHeader,
+.cardGrid,
+.ctaPanel {
+  max-width: 1220px;
+  margin: 0 auto;
+}
+
+.pillarGrid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.pillarCard {
+  border: 1px solid var(--ifm-table-border-color);
+  border-radius: 14px;
+  padding: 1.3rem;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--ifm-background-surface-color) 92%, #b7f1dd 8%), var(--ifm-background-surface-color));
+}
+
+.pillarCard h2 {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.16rem;
+}
+
+.pillarCard p {
+  margin: 0.72rem 0 0;
+  color: var(--ifm-font-color-secondary);
+  line-height: 1.66;
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sectionHeader h2 {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+}
+
+.sectionHeader p {
+  margin: 0;
+  color: var(--ifm-font-color-secondary);
+  max-width: 46ch;
+  line-height: 1.65;
+}
+
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.valueCard {
+  border: 1px solid var(--ifm-table-border-color);
+  border-radius: 14px;
+  padding: 1.3rem;
+  background: var(--ifm-background-surface-color);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.valueCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(32, 201, 151, 0.55);
+}
+
+.valueCard h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.valueCard p {
+  margin: 0.72rem 0 0;
+  color: var(--ifm-font-color-secondary);
+  line-height: 1.66;
+}
+
+.valueCard a {
+  margin-top: 1rem;
+  display: inline-block;
+  text-decoration: none;
+  color: var(--ifm-color-primary-darkest);
+  font-weight: 700;
+}
+
+.ctaPanel {
+  border: 1px solid var(--ifm-table-border-color);
+  border-radius: 16px;
+  padding: clamp(1.8rem, 3.2vw, 2.5rem);
+  text-align: center;
+  background: linear-gradient(130deg, rgba(32, 201, 151, 0.18), rgba(91, 141, 255, 0.15));
+}
+
+.ctaPanel h2 {
+  margin: 0;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.ctaPanel p {
+  margin: 0.8rem auto 0;
+  color: var(--ifm-font-color-secondary);
+  line-height: 1.7;
+  max-width: 70ch;
+}
+
+.ctaPanel .heroActions {
+  justify-content: center;
+  margin-top: 1.2rem;
+}
+
+@media (max-width: 1024px) {
+  .heroBrandMark {
+    display: none;
+  }
+
+  .pillarGrid,
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@media (max-width: 700px) {
+  .heroTitle {
+    max-width: 100%;
+  }
+
+  .terminalBody p {
+    font-size: 0.76rem;
+  }
 }

@@ -10,9 +10,7 @@
             "request": "launch",
             "script": "${file}",
             "args": [
-                "-Env LOCAL",
-                "-AppPath root",
-                "-AppName root"
+                "-Env LOCAL"
             ]
         }
     ]

@@ -1,45 +1,38 @@
 ---
-sidebar_position: 2
+title: Use the plugin
+sidebar_position: 4
 toc_max_heading_level: 4
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-// import VSCodePluginsSetting from './img/vscode_settings_plugins.png';
+import CopilotCLIPlugin from './img/copilot_cli_plugin.png';
+import VSCodePluginMarketplace from './img/add_vscode_marketplace.png';
+import AgentChatVsCode from './img/agent_chat_vscode.png';
+import VSCodeInstallPlugin from './img/vscode_install_plugin.png';
+import CLISelectAgent from './img/cli_select_agent.png';
+import CopilotCLIMCPs from './img/copilot_cli_mcps.png';
+import CopilotCLIMarketplace from './img/copilot_cli_marketplace.png';
+import CopilotCLIPluginInstall from './img/copilot_cli_plugin_install.png';
+import NewProjectSite from './img/new_project_site.png';
 
-// import CopilotCLIPlugin from './img/copilot_cli_plugin.png';
+# Getting started with DocusaurOps plugin
 
-# Getting started with DocusaurOps
-
-DocusaurOps is a GitHub Copilot plugin for Visual Studio Code and the GitHub Copilot CLI. It provides a set of agents and skills to help you in your documentation mangemtn acroos your organizatio ntechnical teams.
+DocusaurOps is a GitHub Copilot plugin for GitHub Copilot in VSCode and CLI focused on documentation management for technical teams within an organization.
+It provides a set of agents and skills to help you in your documentation management across your organization's technical teams.
 
 ## Prerequisites
+Here are the prerequisites you'll need to use the DocusaurOps plugin:
 
-| Requirement | Notes |
-|-------------|-------|
-| [GitHub Copilot license](https://github.com/features/copilot/plans) | Required |
-| [Visual Studio Code](https://code.visualstudio.com/) | Required |
-| [Git](https://git-scm.com/) | Required |
-| [GitHub CLI](https://cli.github.com/) | Recommended for CLI usage |
-| [GitHub Copilot CLI](https://github.com/features/copilot/cli) | Recommended for CLI usage |
+- DocusaurOps infrastructre [deployed](./deployment.mdx) and up and running.
+- [GitHub Copilot license](https://github.com/features/copilot/plans)
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Git](https://git-scm.com/)
+- [GitHub CLI](https://cli.github.com/)
+- [GitHub Copilot CLI](https://github.com/features/copilot/cli)
 
-## Install
-
-**Step 1 — Download the plugin**
-
-Download the latest release from the [DocusaurOps releases page](https://github.com/FranckyC/agents-league-docusaurops/releases) and extract it into the root of your solution repository (next to your `README.md`):
-
-```
-<your solution root>/
-└── plugins/
-    ├── agents/
-    │   └── ...
-    └── skills/
-        └── ...
-```
-
-**Step 2 — Register the plugin**
+### Install from marketplace
 
 <Tabs defaultValue="cli" values={[
 { label: 'Copilot CLI', value: 'cli' },
@@ -47,33 +40,85 @@ Download the latest release from the [DocusaurOps releases page](https://github.
 ]}>
 <TabItem value="cli">
 
-Open a terminal from the root folder, start the Copilot CLI, then install the plugin:
+1. Add your GitHub marketplace (see [deployment guide](./deployment.mdx#step-1---create-required-github-repositories) for details on how to set up one):
 
 ```bash
-copilot
-```
-
-```bash
-/plugin install ./plugins/docusaurops
+copilot plugin marketplace add your-org/docusaurops-core
 ```
 
     <div className="flex justify-center mb-10">
-        {/* <img className="w-[80%]" src={CopilotCLIPlugin}/> */}
+        <img className="w-[80%]" src={CopilotCLIMarketplace}/>
+    </div>
+
+2. Install the plugin:
+
+```bash
+copilot plugin install docusaurops@docusaurops-plugins
+```
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[80%]" src={CopilotCLIPluginInstall}/>
     </div>
 
 </TabItem>
 <TabItem value="vscode">
 
-1. Open settings with `Ctrl+,`, search for `chat.pluginLocations`, and add the plugin path:
+1. Open VS Code settings (`Ctrl+,`), search `chat.plugins.marketplaces`, and add `your-org/docusaurops-core`:
 
     <div className="flex justify-center mb-10">
-        {/* <img className="w-[80%]" src={VSCodePluginsSetting}/> */}
+        <img className="w-[50%]" src={VSCodePluginMarketplace}/>
     </div>
 
-2. Restart VS Code and open a new Copilot chat. You should see the agent listed and ready to use:
+2. In VS Code Extensions, search `@agentPlugins docusaurops` and install `docusaurops-plugin`:
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[50%]" src={VSCodeInstallPlugin}/>
+    </div>
+
+</TabItem>
+</Tabs>
+
+### Validate plugin and use the agent
+
+<Tabs defaultValue="cli" values={[
+{ label: 'Copilot CLI', value: 'cli' },
+{ label: 'Copilot VS Code', value: 'vscode' },
+]}>
+<TabItem value="cli">
+
+1. Start Copilot CLI:
+
+```bash
+copilot
+```
+
+2. Select the agent "DocusaurOps Agent":
+
+```bash
+/agent
+```
+
+    <div className="flex justify-center mb-10">
+        <img className="w-[80%]" src={CLISelectAgent}/>
+    </div>
+
+4. Select a model:
+
+```bash
+/model claude-sonnet-4.6
+```
+
+:::info
+We recommend **Claude Sonnet 4.6** for best results, but you can use any available model.
+:::
+
+</TabItem>
+<TabItem value="vscode">
+
+1. Open a new Copilot chat and confirm the DocusaurOps agent is available:
 
     <div className="flex justify-center">
-        {/* <img className="w-[40%]" src={DocusaurOpsAgentChatVsCode}/> */}
+        <img className="w-[40%]" src={AgentChatVsCode}/>
     </div>
 
 </TabItem>
@@ -81,63 +126,70 @@ copilot
 
 ---
 
-## Agents
+## Use the agent
 
-| Agent | Description |
-|-------|-------------|
-| `DocusaurOps Agent` | Main agent to interact with DocusaurOps. Assists with creating and managing your documentation site, asking questions about existing content, and more. |
+The **DocusaurOps Agent** is designed to assist you in creating and managing your documentation in your projects. To achieve this, it multiple following skills available:
 
----
+#### `docs-setup`
 
-## Skills
+Sets up a new documentation site by cloning the latest template from a dedicated repository, customizing it with your information, and configuring CI/CD pipelines to deploy your site on Azure. Also handles upgrading an existing documentation site to the latest template.
 
-### Documentation skills
+The site is published under a well known URL and then indexed through a Copilot connector (ex: `https://<my-site>.<location>.cloudapp.azure.com/`).
 
-| Skill | Description |
-|-------|-------------|
-| `docusaurops-docs-setup` | Set up or upgrade your local solution with the latest DocusaurOps documentation template. |
-| `docusaurops-docs-ask` | Get answers based on all indexed DocusaurOps sites content. |
+To use it, simply ask the following:
 
-#### `docusaurops-docs-setup`
+> Setup a new documentation site for the current project:
 
-Sets up a new documentation site by cloning the latest DocusaurOps template, customizing it with your information, and configuring CI/CD pipelines to deploy your site on Azure. Also handles upgrading an existing documentation site to the latest template.
+You: "Setup a documentation site for project "HR Smart Assistant" with url 'hr-smart-assistant'
 
-> The site is always published under `https://docusaurops.com`.
+> Create a site with demo content and authentication enabled:
 
-**Usage:**
+You: "Setup a documentation site for project "HR Smart Assistant" with url 'hr-smart-assistant'. Use demo content and enable authentication".
 
-```bash
-/skill docusaurops-docs-setup "Setup documentation for project [site_title] [site_slug] [site_tagline] [repository_url] [contact_email] [project_technologies]"
-```
+`copilot --model claude-sonnet-4.6 --agent docusaurops:docusaurops --prompt "Setup a documentation site for project 'HR Smart Assistant' with url 'hr-smart-assistant'. Use demo content and enable authentication" --allow-all`
 
 > Only `site_title` and `site_slug` are required.
 
-**What happens:**
-1. Downloads the latest DocusaurOps documentation template using your GitHub credentials.
+**What happens at a high level:**
+1. Downloads the latest DocusaurOps documentation template using your GitHub credentials (using `gh auth token`).
 2. Fills in the provided information and prompts you to confirm or supply missing details.
 3. Merges the template with your existing documentation, or creates the documentation structure if it doesn't exist.
-4. Runs the documentation site locally.
+4. Create demo content if requested.
+5. Runs the documentation site locally.
+
+After setup, the new site is deployed under the root website with the URL specified ex:( `https://<my-site>.<location>.cloudapp.azure.com/hr-smart-assistant`):
+
+<div className="flex justify-center mb-10">
+    <img className="w-[80%]" src={NewProjectSite}/>
+</div>
+
+When you'll commit and psuh to your repository, the documentation site will be automatically deployed to Azure through GitHub Actions, without requiring any setup on your repo.
+
+INSERT_VIDEO_DEMO_HERE
 
 ---
 
-#### `docusaurops-docs-ask`
+#### `docs-ask`
 
-Asks questions about the content of all DocusaurOps sites using a custom search engine. Returns an answer based on relevant content found across all indexed sites.
+Asks questions about the content of all DocusaurOps sites using leveraging WorkIQ CLI MCP. Returns an answer based on relevant content found across all indexed sites.
 
 **Usage:**
 
-```bash
-/skill docusaurops-docs-ask "Where is the documentation about project X?"
-```
+> Ask about a specific project:
 
-```bash
-/skill docusaurops-docs-ask "Have we already implemented a custom Copilot solution? If yes, show the approach taken and key points."
-```
+You: "Where is the documentation about project X?"
+You: "Explain the architecture on project Y based on the available documentation."
 
----
+> Ask about a specific topic across all projects:
 
-### Architecture skills
+You: "Find me examples where we implemented a the feature XYZ and explain the architecture we used.""
+You: "What projects are using these technologies already?" 
+You: "Find guidance on how to setup feature XYZ"
 
-| Skill | Description |
-|-------|-------------|
-| `docusaurops-azure-costing` | Determines infrastructure and operational costs from Bicep templates, producing a Markdown cost estimate with real-time CAD pricing from the Azure Retail Prices API. |
+INSERT_VIDEO_DEMO_HERE
+
+#### `docs-specs`
+
+
+### `docs-generate`
+

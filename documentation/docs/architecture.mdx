@@ -1,167 +1,134 @@
 ﻿---
-title: "Architecture"
-sidebar_position: 1
+title: "How it works"
+sidebar_position: 2
 ---
 
 import DocumentationSkillsArchitecture from './img/docusaurops_docs_setup_architecture.png';
 import ComplianceSkillsArchitecture from './img/docusaurops_docs-compliance_architecture.png';
 
-DocusaurOps, the ultimate unified documentation platform for technical teams. 
+# How it works
 
-# Architecture
+DocusaurOps is an architecture pattern that any company can adopt to rationalize technical documentation across teams and projects — as a fully self-service experience. It is also a foundation for a customizable AI-SDLC approach, where teams can write their own skills using the same underlying techniques.
 
-DocusaurOps is a resuable platform architecture any company can set up to rationalized technical documentation across all teams and projects. 
+The solution is built on the following key components:
 
-This is an foundation for an customizable approache (ex: writing your own skills using the same techniques). 
-It is composed of the following components:
+| Component | Role |
+|-----------|------|
+| **GitHub Copilot plugin** | Available in VS Code Chat and GitHub Copilot CLI |
+| **Azure Application Gateway** | Routes incoming requests to the right documentation site |
+| **Docusaurus** | Static site generator enabling a documentation-as-code approach |
+| **GitHub Actions & reusable workflows** | Automates deployment end-to-end |
+| **Copilot Connector** | Indexes all sites for AI-powered search (Enterprise Websites) |
+| **WorkIQ** | Reads and writes Word documents; powers compliance document generation |
 
-- A **GitHub Copilot plugin** to interact with users and trigger documentation site creation and search commands directly from their work environment (CLI or Visual Studio Code).
-- Azure
-Docusaurus
-GitHub
-WorkIQ 
+One of the goals of this solution is to demonstrate what it takes — from an architectural standpoint — for an AI-powered solution to be truly valuable, and how all components must work together to form a coherent whole.
 
-The plugin itself is divided into mutliple skills set:
+---
 
-- Documentation setup
-- Project specific document generation/revie
-
-
-
-
-## Documentation setup architecture
+## Documentation setup
 
 <div className="flex justify-center mb-10">
     <img className="w-[60%]" src={DocumentationSkillsArchitecture}/>
 </div>
 
-The flow is as follow:
+### How it works
 
-1 - In a new or existing repostiory, developers install the DocusaurOps plugin from a company marketplace. In that case, the marketplace can be simply a dedicated GitHub repository configured as such hosting the plugin definition. The plugin can be instelled in either VS Code Chat experecne or GitHub Copilit CLI depending on the user prefernces.
+**1. Install the plugin**
+
+Developers install the DocusaurOps plugin from their company marketplace — a dedicated GitHub repository configured to host the plugin definition. The plugin works in both VS Code Chat and GitHub Copilot CLI, so developers can choose the experience that suits them best.
 
 > Short video here showing the installation process in both experiences.
 
-2- From the plugin, developers trigger the "setup documentation" command to scaffold a new documentation structure for their project. The plugin asks for basic inforation such as the project name and the desired URL (i.e. slug). 
+**2. Scaffold a new documentation site**
 
-3. From here the /setup-docs skill kicks in:
-    - It clones the latest documentation structure from a dedicated GitHub repository using the GitHub CLI (gh) using user credentials. Having a dedicated GitHub repository hosting the templates stucture allows to update it independently from the plugin, and push updates to it without the need to update the plugin itself. It also allows to keep track of changes and history on the template, and have a clear diff when changes are made. This repository contains specific instructions for the plugin (for instance the migration path is applicable) the Docausurus sturcutre and a predefined GitHub workflow template to deploy the documentation site.
+From the plugin, developers trigger the **"Setup documentation"** command. They provide basic information — project name and desired URL slug — and the plugin takes care of the rest.
 
-> Short video here showing plugin work and outomes.
+**3. Download and configure the template**
 
-From the consumer repository, an environment file is created by the plugin containing all information needed to deploy the site (site name, slug, description, contact information, etc.) and files are updated accordingly. 
+The `/docs-setup` skill clones the latest documentation structure from a dedicated template repository, maintained separately, using the GitHub CLI and the developer's own credentials. This separation of template from plugin means:
+- The template can be updated independently, without touching the plugin.
+- Changes are tracked with a full history and clear diffs.
+- Migration paths are embedded directly in the template as instructions for the plugin (via a dedicated .md file).
 
-4. Developers write their documentation locally using the Docusaurus structure and preview it locally with the provided commands. Once done, they push to the repository, the `deploy-docs.yml` workflow is triggered. This workflow calls the reusable `deploy_site.yml` workflow hosted in a shared repository, passing all necessary variables to deploy the site on Azure. This workflow handles all the deployement process:
-    - COnfigure the application gateway backend pools and path rules to route incoming requests to the new site.
-    - COnfigure authetnication on the new app
-    - Deploy the site content fron the caller repository
+An environment file is generated in the repository containing all deployment metadata (site name, slug, description, contact information, etc.), and all placeholder values are replaced automatically.
 
-    In that process, developers do not need to setup any credentials or variables. All is done automatically for them!
+> Short video here showing the plugin in action and the resulting output.
 
-> Short video here showing the deploymet done in GitHub and the outcomes on Azure.
+**4. Write, preview, and deploy**
 
-5. The new site is published under the root URL `https://docs.my-company.com/{site_slug}` and automatically indexed by a "Enterprise website" Copilot connector (default connector from Microsoft) using the sitemap dynamically generated by the root web application.
+Developers write their documentation locally using the Docusaurus structure and preview it with the provided commands. When they push to the repository, the `deploy-docs.yml` workflow is triggered. It calls the reusable `deploy_site.yml` workflow from the shared repository, which handles the entire deployment:
 
-> Short video here showing the site available on Azure.
+- Configures Application Gateway backend pools and path rules to route traffic to the new site.
+- Configures authentication on the new app.
+- Deploys the site content from the caller repository.
 
-6. Leveraging Copilot and WorkIQ, developers can then ask questions about other projects (how thinkgs were done in this XYZ project), creating a mesh knowledge network across the entire company!
+**No credentials or variables need to be set up by the developer — everything is resolved automatically**.
 
+> Short video here showing the deployment running in GitHub and the result on Azure.
 
-The big benefit of this architecture it is a virtous cycle (it feeds itself). The more teams are using it, the more content is added to the general knowledge and can be used a reference for other projects improving the quality organicaly.
+**5. Site goes live and gets indexed**
 
-## 
+The new site is published under the root URL `https://docs.my-company.com/{site_slug}` and automatically indexed by the Microsoft "Enterprise Websites" Copilot Connector, using the `sitemap.xml` dynamically generated by the root web application.
 
-As a complement of the documentation platform itself, the DocusaurOps also address a common problem in companies, generating documents for compliance and tracability prupose
+> Short video here showing the live site on Azure.
 
-Documentation is not just about ecplaining how your solution works, ti 
+**6. Searchable across the entire company**
+
+Using the `/docs-ask` skill and WorkIQ, developers can now ask questions across all projects — *"How was feature XYZ implemented in project ABC?"* — creating a mesh of shared knowledge across the entire organization.
+
+:::tip A virtuous cycle
+The more teams adopt the platform, the richer the shared knowledge becomes. Content added by one team becomes a reference for others, continuously improving quality across the organization — organically.
+:::
+
+---
+
+## Compliance & traceability
 
 <div className="flex justify-center mb-10">
     <img className="w-[60%]" src={ComplianceSkillsArchitecture}/>
 </div>
 
-Objectives:
+Documentation is not just about explaining how a solution works. It is also a compliance and traceability artifact. DocusaurOps also addresses a common organizational pain point: **keeping formal documents made by non-technical stakeholders (like business analysts, product owners, etc.) in sync with the actual implementation**.
 
-- Favoritize colalboration between project stakeholders on project documentation and specifications. In that solution we took the example of requirement specification aignement between analyste and technical teams and alos document generation for ssyte mdesign document generation and review, two very common scenarios encountered in most organizations.
+The goal is to foster collaboration between project stakeholders on documentation and specifications — specifically around two scenarios that appear in most organizations: **aligning requirements between business analysts and technical teams**, and **generating Software Design Documents for formal review**.
 
+### `/docs-specs` — From requirements to workable issues
 
-- `/generate-specs`: the skill is used to extract key. Most of the time, requirement analysis done by buienss analsyt aren't fully workable for technical and most of the time need to be reworked, split, completed, etc., This skills helps to bdrige the gap between analytical and technically workable content. Technical teams define theie excpetations regaring specfications to have omething workabl. Business analyst focus on their relationship with stakeholder to analyze requirements.
+Business analysts or product owners often produce requirement documents that are not immediately actionable for technical teams as they often lack details. This skill bridges the gap by transforming raw requirements into structured, technically workable GitHub issues.
 
-1 - In a new or existing repostiory, developers install the DocusaurOps plugin from a company marketplace. In that case, the marketplace can be simply a dedicated GitHub repository configured as such hosting the plugin definition. The plugin can be instelled in either VS Code Chat experecne or GitHub Copilit CLI depending on the user prefernces.
+**1. Trigger the command**
 
-2- From the plugin, developers trigger the "Generate specifications" command to generate technical specifications from a business requirement document (can be an URL in SharePoint or OneDrive). The plugin uses WorkIQ Word NCP server to read the document and format the cntent according to a specification template. If inframtion are missing from the original requirement, the plugin write required information diretly as comment in the documnet so the analyst can reply. It goes like back and forht until the requirements are complete enough to generate technical specifications.
+A developer triggers the **"Generate specifications"** command from the plugin, pointing to a business requirement document in SharePoint or OneDrive, for instance a Word document (i.e. .docx).
 
-3. The specification are then created in a proepr GitHub proejct attached to the repository (we assume it is already craeted in that solution) as issues.
+**2. Extract and align requirements**
 
-4. Onece a PR is done, a GitHub cloud agent is triggered to review the implementation according to the associated requiremnet specification and the existing documention (already setup from hte previous skill). The agent can then provide feedback and comments directly in the PR to help developers improve their implementation and align it with the specifications and documentation.
+The plugin uses the WorkIQ Word MCP server to read the document and format its content according to a specification template. If information is missing, the plugin adds comments directly in the Word document so the analyst can respond. This back-and-forth continues until the requirements are complete enough to generate workable specifications.
 
+**3. Create GitHub issues**
 
-- `/generate-sdd`: the skill is used to produce official documentation based on the documentation as code content created with the previous skill. An SDD is often required for review purpose to determine if a solution comply with company guideles (enterprise architecture ,secruity, compliance, resiliecnes etc). This review is often done by external teams requiring formal documents to work on. This way, no more manual filling to do. CContent is accurate and easily accessible.
+The finalized specifications are created as issues in the GitHub project associated with the repository — ready for the team to plan and implement.
 
+**4. Automated PR review**
 
-1- From the plugin, developers trigger the "Generate SDD" command to generate a Software Design Document (SDD) based on the content of their documentation site. The plugin uses WorkIQ Word NCP server to create a well formatted SDD document that can be shared with stakeholders and used for tracability and compliance purposes. The generated document is then stored in a dedicated SharePoint library for easy access and reference.
-
-2- The olugin looks for existing documentation in he repository to extract all necessary information to fill in the SDD template. 
-
-3- A new document is created according to the template. 
-
-The process alos work the other way around. It reads the existing comment son the doc (for instance from a previous review) and compile required actions to d oin the solution itself. For instance, if the reviewer ask to add more information about the hosting solution, the plugin can create a new section in the documentation site to fill in this information and link it in the generated SDD.
-
-
-## Overview
-
-
-:::important
-The scenario where a sub web application is protected by a separate Entra ID app is not yet supported (i.e. the _"Protected Web Application - App1"_ scenario in the diagram) due to OAuth2 redirect URL behavior.
-:::
-
-## How this works in practice
-
-### 1. Install the plugin
-
-Developers install the plugin on their Copilot CLI or directly in Visual Studio Code chat either manually by downloading the latest release from the GitHub repository, or directly from the GitHub marketplace once the plugin is available there.
-
-### 2. Set up a documentation site
-
-From CLI or chat, developers use the **"Setup documentation"** command from the plugin agent to create a new documentation site for their project. This triggers the following actions:
-
-| Action | Detail |
-|--------|--------|
-| **Download template** | The latest content from the template repository is copied locally to the developer's machine using their current GitHub credentials. |
-| **Create structure** | The documentation structure is created locally based on the template, or merged with existing documentation if any. The template contains an `INSTRUCTIONS.md` file with all required information about the structure and guidance to migrate existing content across versions. |
-| **Create CI workflow** | A `deploy-docs.yml` workflow is created for CI, calling the reusable `deploy_site.yml` workflow in the `docusaurops-core` repository. |
-| **Fill placeholders** | Placeholder values are replaced with user context (metadata, project title, description, etc.) and the user is prompted to fill in any missing information. |
-
-### 3. Deploy on push
-
-Whenever the content of the `/documentation` folder is updated, the deployment is triggered. The variables needed to deploy via `deploy_site.yml` are resolved directly from the `docusaurops-core` repository using a `DOCUSAUROPSREPO_TOKEN` secret set at organization level  no per-repository configuration needed. The documentation content is built in the context of the caller repository.
-
-Each new site is provisioned via an **Azure deployment stack** (enabling rollbacks and idempotent redeployments). The following integration actions are performed automatically:
-
-| Action | Detail |
-|--------|--------|
-| **Provision site** | Site is created via a deployment stack using a normalized template to ensure consistency (authentication, settings, etc.). |
-| **Update gateway** | A new backend pool is added pointing to the new site, and a new path rule is added to route incoming requests to it. |
-| **Update Entra ID app** | A redirect URL is dynamically added to the shared Entra ID app to ensure the OAuth2 authentication flow works correctly through the gateway. |
-| **Update sitemap** | The site URL is added to `ENV_SITE_URLS`, used by the root web application to generate the `sitemap.xml` file consumed by the Copilot Connector. |
-
-### 4. Site goes live
-
-After provisioning completes, the new site is available at `https://docusaurops.ca/{site_slug}`.
-
-### 5. Automatic indexing
-
-The site is automatically indexed by the Copilot connector (Microsoft built-in "Enterprise Websites (On-Premises)") using the `sitemap.xml` generated by the root web application. This enables unified search across all sites using a single connector. Open Graph properties are indexed to provide rich answers with content previews in the agent.
-
-### 6. Available in Copilot
-
-All indexed sites are available through search or the Copilot Retrieval API to answer user questions when using the **"Ask documentation"** command from the plugin agent.
+Once a PR is submitted, a GitHub cloud agent reviews the implementation against the associated requirement specification and the existing documentation. The agent adds feedback and comments directly in the PR to help developers align their implementation with the requirements.
 
 ---
 
-## GitHub repositories
+### `/generate-sdd` — Produce a formal Software Design Document
 
-| Repository | URL | Description |
-|------------|-----|-------------|
-| **docusaurops-core** | `https://github.com/sonbae-corp/docusaurops-core` | Main repo containing the agent plugin definition and reusable workflow. Also contains the root web application documentation and configuration. |
-| **docusaurops-template** | `https://github.com/sonbae-corp/docusaurops-template` | Repository containing the latest documentation structure and workflow configuration used as a template when creating new documentation sites. This is the repository cloned when using the "Setup documentation" command from the agent plugin. |
-| **docusaurops-sample** | `https://github.com/sonbae-corp/docusaurops-test` | Sample repository for testing the plugin. Create a new branch from `main` every time you want to start from scratch, like a new repo. |
+An SDD is often required by external teams (enterprise architecture, security, compliance) to validate that a solution meets company standards. This skill generates a formal, well-structured SDD directly from the documentation-as-code content — no manual filling required.
+
+**1. Trigger the command**
+
+A developer triggers the **"Generate SDD"** command from the plugin.
+
+**2. Extract content from the repository**
+
+The plugin scans the existing documentation to extract all information needed to populate the SDD template.
+
+**3. Generate the document**
+
+A new Word document is created according to the template and stored in a dedicated SharePoint library for easy access and reference.
+
+**Bonus — two-way synchronization:** The process also works in reverse. If a reviewer adds comments to the generated SDD (e.g., requesting more detail about the hosting infrastructure), the plugin reads those comments, creates the corresponding sections in the documentation site, and links them back in the SDD.
 

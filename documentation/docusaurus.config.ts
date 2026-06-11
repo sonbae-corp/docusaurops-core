@@ -75,6 +75,9 @@ const config: Config = {
         srcDark: 'img/logo-dark.svg',
       },
       items: [
+        {to: 'docs/intro', label: 'DocusaurOps at glance', position: 'left'}, 
+        {to: 'docs/architecture', label: 'How it works', position: 'left'}, 
+        {to: 'docs/deployment', label: 'Deployment Guide', position: 'left'}, 
         {to: 'docs/getting_started', label: 'Getting started', position: 'left'}, 
         {
           href: 'https://github.com/FranckyC/agents-league-docusaurops',
