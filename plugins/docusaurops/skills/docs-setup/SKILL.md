@@ -43,7 +43,7 @@ Argument-to-variable mapping:
 
 5. Resolve configuration values from skill arguments (see mapping above). Ask the user only for missing values:
    - `ENV_SITE_TITLE` (required): Site display title (e.g. `My Project Docs`).
-   - `ENV_BASE_URL` (optional): URL slug for Azure Application Gateway path routing (e.g. `my-project-docs`). Generate from site title if missing. It should be lowercase, without spaces and without slash '/'.
+   - `ENV_BASE_URL` (required): URL slug for Azure Application Gateway path routing (e.g. `my-project-docs`). Generate from site title if missing. It should be lowercase, without spaces and without slash '/'.
      - Example transformation: `My Project Docs` → `my-project-docs`
    - `ENV_SITE_TAGLINE` (optional): Site tagline (e.g. `Documentation for My Project`).
    - `ENV_REPOSITORY_URL` (optional): GitHub repository URL (e.g. `https://github.com/username/repository`). If missing, infer from current git repository.
@@ -67,12 +67,11 @@ Argument-to-variable mapping:
    ```
 
 9. Optional `DEMO` mode (only when explicitly requested by the user):
-   - After the documentation structure is in place, generate fake sample documentation content for an IT development project.
+   - After the documentation structure is in place, generate fake sample documentation content derivbed from the provided `[[ENV_SITE_TITLE]]` and `[[ENV_PROJECT_TECHNOLOGIES]]` values. The content should be realistic but fictional, and should showcase the capabilities of the documentation site template.
    - Create 3 to 4 pages in `docs/` (or equivalent project docs folder), for example:
      - `architecture`
      - `api-overview`
-     - `deployment`
-     - `runbook` (optional 4th page)
+     - `deployment`  
    - Use appealing, polished markdown structure with realistic but fictional content (headings, tables, code snippets, diagrams, and callouts).
    - Ensure links/sidebar navigation are updated so demo pages are easy to browse.
    - Do not overwrite existing user-authored docs without explicit confirmation.
