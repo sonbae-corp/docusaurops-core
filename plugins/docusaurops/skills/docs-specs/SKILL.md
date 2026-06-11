@@ -1,31 +1,91 @@
 ---
 name: docs-specs
-description: 'Generate requirement specifications from a Word document and translate them into proper GitHub workable issues'
+description: 'Generate feature specifications from a Word document and convert them into GitHub issues'
 argument-hint: "[requirement_document_path] [target_project]"
 ---
 
-# DocusaurOps Setup
+# Docs Specs Skill
 
-Generate requirement specifications from a Word document and translate them into proper GitHub workable issues.
+Extract feature requirements from a Word document, generate one specification file per feature, and create matching GitHub issues linked to those specs.
 
-## When to Use
+## Use This Skill When
 
-- Understanding and extracting key requirement specifications from a Word document produced by analysis or stakeholders and translating them into proper GitHub workable issues for developers or architects.
-- Create issues in an existing project or create a new one for the generated issues.
+- Requirements are provided in a Word document from stakeholders.
+- The team needs implementation-ready feature specs in the documentation site.
+- The team wants GitHub issues created from those specs.
 
 ## Inputs
 
-- Input in the document to read from and where to extract the requirements specifications. Confirm the target documentation root folder (default: `/documentation`).
-- Existing GitHub project URL if already exists. The user should have access to the project.
+- `requirement_document_path`: SharePoint or OneDrive URL to the requirement document.
+- `target_project`: Existing GitHub project URL (if available).
+- Documentation root folder (default: `/documentation`).
 
-## Procedure
+## Required References
 
-1. Using the `workiq_mcpWordServer` MCP server from `.mcp.json`, read the document from the URL passed as parameter.
+- Specification template: `plugins/docusaurops/skills/docs-specs/spec.template.md`
+- Output docs location: `/documentation/docs`
 
-2. From the content, generate a specification following instructions in the `spec.template.md` file. Each specification should be generated as a separate issue with its own acceptance criteria, description, etc. Output specifications in markdown format and integrated in hte `/documentation/docs` folder respecting the existing style and structure.
+## Workflow
 
-3. If there ae not enough details in the document to generate a complete specification, add comments directly in the Word document requesting for the missing information. For each comment added, also add a placeholder in the generated specification indicating that there is missing information that needs to be filled in. Make sure you identify yourself when adding comments in the document so stakeholders know an agent processed the document.
+1. Read the requirement document.
+2. Extract distinct features or requirement groups.
+3. Generate one markdown specification file per feature using the template.
+4. If requirement details are missing, add comments in the Word document and add matching placeholders in the spec files.
+5. Create or reuse a GitHub project and create one issue per generated specification.
+6. Link each issue to its full spec in the documentation.
 
-4. On the current repository, use an exsting GitHUb proejct to create issues form the generated specs. The issue should be a condesned version of the specification in the documentation site with a link to the full specification in the documentation. If no project exists, create a new one and use it to create the issues.
+## Detailed Procedure
+
+1. Read source document
+
+- Use the Word MCP tool to read the document from `requirement_document_path`.
+- Parse all functional requirements, constraints, assumptions, and acceptance criteria.
+
+2. Build feature list
+
+- Group requirements by feature.
+- Keep features independent when possible.
+- Do not merge unrelated features into a single spec file.
+
+3. Generate specification files
+
+- Follow `spec.template.md` for structure.
+- Create one markdown file per feature in `/documentation/docs`.
+- File naming rule: use a stable feature-based name, for example `login_spec.md`, or preserve requirement IDs when available.
+- Each specification must include at least:
+	- Feature overview
+	- User stories or use cases
+	- Acceptance criteria
+	- Constraints, dependencies, and assumptions
+	- Open questions (if any)
+
+4. Handle missing information
+
+- If the source document is incomplete, add comments directly in the Word document requesting missing details.
+- Each comment must identify the agent as the source.
+- Add a corresponding placeholder section in the generated spec file indicating missing information.
+
+5. Create GitHub issues
+
+- Reuse `target_project` if provided.
+- If no project exists, create a new project in the current repository context.
+- Create one issue per generated spec.
+- Issue content should be a condensed implementation summary, not the full spec.
+- Include a link to the full specification markdown file in the documentation.
+
+## Output Requirements
+
+- One spec file per feature in `/documentation/docs`.
+- One GitHub issue per spec.
+- Every issue links to exactly one full spec.
+- Missing information is tracked in both the Word doc comments and spec placeholders.
+
+## Quality Checklist
+
+- No typos in generated headings and filenames.
+- Specs are complete enough for developers to implement.
+- Acceptance criteria are explicit and testable.
+- Issues are concise and actionable.
+- Documentation links are valid.
 
 
