@@ -68,7 +68,7 @@ const ghostBtn = 'no-underline rounded-[10px] font-bold py-[0.78rem] px-[1.2rem]
 export default function Home() {
   const { siteConfig } = useDocusaurusContext();
   const logoLight = useBaseUrl('/img/logo-light.svg');
-  const logoDark = useBaseUrl('/img/logo-dark.svg');
+  const githubLogo = useBaseUrl('/img/gh_logo.svg');
   const lifecycleImg = useBaseUrl('/img/docusaurops_lifecycle.png');
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
 
@@ -109,22 +109,19 @@ export default function Home() {
         <section className="relative overflow-hidden px-[clamp(1rem,4vw,3rem)] pt-[clamp(2rem,4vw,3.6rem)] pb-[clamp(3rem,7vw,5.8rem)]">
           <div className={styles.heroGlow} />
           <div className="max-w-[1220px] mx-auto grid grid-cols-1 gap-5">
-            <p className="inline-flex w-fit m-0 border border-[rgba(195,208,238,0.48)] text-[#dce7ff] text-[0.72rem] font-bold tracking-[0.1em] rounded-full py-[0.32rem] px-[0.72rem]">
-              The ultimate documentation platform based on AI
-            </p>
+            <a
+              href="https://info.microsoft.com/Agents-League-Hackathon-Registration.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-[70%] inline-flex items-center gap-[0.4rem] bg-[linear-gradient(90deg,#7c3aed22,#2563eb22)] border border-[#7c3aed66] text-[#a78bfa] text-[0.78rem] font-semibold tracking-[0.04em] uppercase py-[0.35rem] px-[0.85rem] rounded-full mb-5 no-underline transition-[background,border-color] duration-200 hover:bg-[linear-gradient(90deg,#7c3aed44,#2563eb44)] hover:border-[#7c3aedaa] hover:no-underline"
+            >
+              Made with ❤️ and ☕ for the 🏆 Agents League Hackathon &mdash; Creative Apps category // June 2026 By Franck Cornu
+            </a>
             <div className="flex items-start gap-4 flex-wrap">
               <h1 className="m-0 max-w-[18ch] text-[#f7fbff] font-['Space_Grotesk',sans-serif] text-[clamp(2rem,4.2vw,4.3rem)] leading-[1.02] tracking-[-0.03em] flex-1 min-w-0">
                 Transform Your Organizational Knowledge Into a Strategic Asset
               </h1>
               <div>
-              <a
-                href="https://info.microsoft.com/Agents-League-Hackathon-Registration.html"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-[0.4rem] bg-[linear-gradient(90deg,#7c3aed22,#2563eb22)] border border-[#7c3aed66] text-[#a78bfa] text-[0.78rem] font-semibold tracking-[0.04em] uppercase py-[0.35rem] px-[0.85rem] rounded-full mb-5 no-underline transition-[background,border-color] duration-200 hover:bg-[linear-gradient(90deg,#7c3aed44,#2563eb44)] hover:border-[#7c3aedaa] hover:no-underline"
-              >
-                Made with ❤️ for the 🏆 Agents League Hackathon &mdash; Creative Apps category
-              </a>
               <div className="flex justify-end">
               <ThemedImage
                 alt="DocusaurOps Logo"
@@ -132,6 +129,19 @@ export default function Home() {
                 sources={{ light: logoLight, dark: logoLight }}
               />
             </div>
+            <a
+              href="https://github.com/FranckyC/agents-league-docusaurops.git"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 inline-flex items-center gap-2 text-[#c4d0ea] hover:text-[#f7fbff] no-underline transition-colors"
+              aria-label="Open repository clone URL on GitHub"
+            >
+              <img src={githubLogo} alt="GitHub" className="w-4 h-4" />
+              <span className="text-[0.78rem] font-semibold tracking-[0.03em]">Clone URL</span>
+              <span className="font-['JetBrains_Mono',monospace] text-[0.72rem] text-[#8da3cf]">
+                https://github.com/FranckyC/agents-league-docusaurops.git
+              </span>
+            </a>
               </div>
             </div>
 
@@ -147,7 +157,7 @@ export default function Home() {
               <a href="/docs/getting_started" className={primaryBtn}>Get Started with the plugin</a>
               <a href="/docs/deployment" className={ghostBtn}>Deploy it to your org!</a>
             </div>
-            <div className="max-w-[760px] mt-2 rounded-2xl border border-[rgba(183,241,221,0.35)] bg-[rgba(2,8,22,0.76)] shadow-[0_24px_42px_rgba(2,8,24,0.48)] overflow-hidden backdrop-blur-[8px]">
+            <div className="max-w-[850px] mt-2 rounded-2xl border border-[rgba(183,241,221,0.35)] bg-[rgba(2,8,22,0.76)] shadow-[0_24px_42px_rgba(2,8,24,0.48)] overflow-hidden backdrop-blur-[8px]">
               <div className="border-b border-[rgba(195,208,238,0.2)] py-[0.7rem] px-[0.85rem] flex items-center gap-[0.4rem]">
                 <span className="w-[0.62rem] h-[0.62rem] rounded-full bg-[#ff5f56]" />
                 <span className="w-[0.62rem] h-[0.62rem] rounded-full bg-[#ffbd2e]" />
@@ -167,8 +177,9 @@ export default function Home() {
                     <p className="m-0 text-[#eef5ff]">
                       <span className="text-[#72dfbf] mr-[0.4rem]">$</span>{cmd}
                       {video && (
-                        <span className="ml-3 inline-flex items-center gap-1 text-[0.72rem] text-[#72dfbf] opacity-70 group-hover:opacity-100 transition-opacity">
-                          🎞️ watch demo
+                        <span className="ml-3 inline-flex items-center gap-2 rounded-full border border-[#72dfbf] bg-[rgba(114,223,191,0.14)] px-3 py-1 text-[0.82rem] font-bold tracking-[0.02em] text-[#b9ffe8] opacity-95 group-hover:bg-[rgba(114,223,191,0.24)] group-hover:text-[#eafff8] transition-colors">
+                          <span className="text-[0.95rem]" aria-hidden="true">🎞️</span>
+                          watch demo
                         </span>
                       )}
                     </p>
