@@ -1,4 +1,5 @@
 
+import { useState } from 'react';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import useBaseUrl from '@docusaurus/useBaseUrl';
@@ -7,8 +8,25 @@ import Head from '@docusaurus/Head';
 import styles from './index.module.css';
 
 const commands = [
-  'copilot plugin install docusaurops@docusaurops-plugins',
-  'copilot --agent docusaurops:docusaurops --prompt "Setup documentation for my project"',
+  {
+    comment: '// Install the plugin',
+    cmd: 'copilot plugin install docusaurops@docusaurops-plugins'
+  },
+  {
+    comment: '// Scaffold a new documentation site using the company template',
+    cmd: `copilot --agent docusaurops:docusaurops --prompt "Setup documentation for my project 'HR Smart Assistant' with url 'hr-smart-assistant'"`,
+    video: 'https://www.youtube.com/embed/rcS7U7C5ufg'
+  },
+  {
+    comment: '// Ask about content across all documentation sites in the DocusaurOps network',
+    cmd: `copilot --agent docusaurops:docusaurops --prompt "Did we already implement a project using Azure Application Gateway? If yes, which one and what configuration did we use?"`,
+    video: 'https://www.youtube.com/embed/xGUISHrJpyo'
+  },
+  {
+    comment: '// Generate specifications from a SharePoint document',
+    cmd: `copilot --agent docusaurops:docusaurops --prompt "Generate specifications from document https://myorg.sharepoint.com/sites/hr-smart-assistant/Shared Documents/projects_requirements.docx"`,
+    video: 'https://www.youtube.com/embed/cUkXb5Wmd3o',
+  },
 ];
 
 const pillars = [
@@ -18,7 +36,7 @@ const pillars = [
   },
   {
     title: 'Documentation-As-Code Lifecycle',
-    description: 'Generate, version, review, and deploy Markdown documentation using well known Docusaurus tool',
+    description: 'Generate, version, review, and deploy Markdown documentation using the well-known Docusaurus tool',
   },
   {
     title: 'Search-Ready Knowledge Mesh',
@@ -39,7 +57,7 @@ const cards = [
   },
   {
     title: 'Access organizational knowledge with WorkIQ',
-    description: 'Use the DocusaurOps agent to retrieve architecture, process, and runbook knowledge instantly levragin WorkIQ tools.',
+    description: 'Use the DocusaurOps agent to retrieve architecture, process, and runbook knowledge instantly leveraging WorkIQ tools.',
     href: '/docs/development/intro',
   },
 ];
@@ -52,6 +70,7 @@ export default function Home() {
   const logoLight = useBaseUrl('/img/logo-light.svg');
   const logoDark = useBaseUrl('/img/logo-dark.svg');
   const lifecycleImg = useBaseUrl('/img/docusaurops_lifecycle.png');
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
 
   return (
     <Layout title={siteConfig.title} description="Engineering knowledge platform powered by DocusaurOps and Copilot">
@@ -60,6 +79,33 @@ export default function Home() {
       </Head>
 
       <main className="flex flex-col gap-10 pb-12">
+        {videoUrl && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm"
+            onClick={() => setVideoUrl(null)}
+          >
+            <div
+              className="relative w-full max-w-3xl mx-4 rounded-2xl overflow-hidden shadow-2xl border border-[rgba(183,241,221,0.25)]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setVideoUrl(null)}
+                className="absolute top-3 right-3 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-[rgba(2,8,22,0.8)] text-[#dce7ff] hover:bg-[rgba(32,201,151,0.3)] transition-colors cursor-pointer border-0"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+              <div className="aspect-video">
+                <iframe
+                  src={`${videoUrl}?autoplay=1`}
+                  className="w-full h-full"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </div>
+        )}
         <section className="relative overflow-hidden px-[clamp(1rem,4vw,3rem)] pt-[clamp(2rem,4vw,3.6rem)] pb-[clamp(3rem,7vw,5.8rem)]">
           <div className={styles.heroGlow} />
           <div className="max-w-[1220px] mx-auto grid grid-cols-1 gap-5">
@@ -70,6 +116,7 @@ export default function Home() {
               <h1 className="m-0 max-w-[18ch] text-[#f7fbff] font-['Space_Grotesk',sans-serif] text-[clamp(2rem,4.2vw,4.3rem)] leading-[1.02] tracking-[-0.03em] flex-1 min-w-0">
                 Transform Your Organizational Knowledge Into a Strategic Asset
               </h1>
+              <div>
               <a
                 href="https://info.microsoft.com/Agents-League-Hackathon-Registration.html"
                 target="_blank"
@@ -78,7 +125,16 @@ export default function Home() {
               >
                 Made with ❤️ for the 🏆 Agents League Hackathon &mdash; Creative Apps category
               </a>
+              <div className="flex justify-end">
+              <ThemedImage
+                alt="DocusaurOps Logo"
+                className="w-[80%]  opacity-90"
+                sources={{ light: logoLight, dark: logoLight }}
+              />
             </div>
+              </div>
+            </div>
+
             <img
               src={lifecycleImg}
               alt="DocusaurOps Lifecycle"
@@ -89,7 +145,7 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-[0.85rem]">
               <a href="/docs/getting_started" className={primaryBtn}>Get Started with the plugin</a>
-              <a href="/docs/deployment" className={ghostBtn}>Deploy it your org!</a>
+              <a href="/docs/deployment" className={ghostBtn}>Deploy it to your org!</a>
             </div>
             <div className="max-w-[760px] mt-2 rounded-2xl border border-[rgba(183,241,221,0.35)] bg-[rgba(2,8,22,0.76)] shadow-[0_24px_42px_rgba(2,8,24,0.48)] overflow-hidden backdrop-blur-[8px]">
               <div className="border-b border-[rgba(195,208,238,0.2)] py-[0.7rem] px-[0.85rem] flex items-center gap-[0.4rem]">
@@ -99,25 +155,27 @@ export default function Home() {
                 <p className="m-0 ml-auto text-[#8da3cf] text-[0.78rem] lowercase tracking-[0.08em]">copilot-cli</p>
               </div>
               <div className="py-[0.9rem] px-4">
-                {commands.map((line, i) => (
-                  <p
-                    key={line}
-                    className={`m-0 py-2 text-[#eef5ff] font-['JetBrains_Mono',monospace] text-[0.81rem] leading-[1.68]${
+                {commands.map(({ comment, cmd, video }, i) => (
+                  <div
+                    key={cmd}
+                    onClick={video ? () => setVideoUrl(video) : undefined}
+                    className={`py-2 font-['JetBrains_Mono',monospace] text-[0.81rem] leading-[1.68]${
                       i < commands.length - 1 ? ' border-b border-[rgba(195,208,238,0.14)]' : ''
-                    }`}
+                    }${video ? ' cursor-pointer group' : ''}`}
                   >
-                    <span className="text-[#72dfbf] mr-[0.4rem]">$</span> {line}
-                  </p>
+                    <p className="m-0 text-[#64799f] italic">{comment}</p>
+                    <p className="m-0 text-[#eef5ff]">
+                      <span className="text-[#72dfbf] mr-[0.4rem]">$</span>{cmd}
+                      {video && (
+                        <span className="ml-3 inline-flex items-center gap-1 text-[0.72rem] text-[#72dfbf] opacity-70 group-hover:opacity-100 transition-opacity">
+                          🎞️ watch demo
+                        </span>
+                      )}
+                    </p>
+                  </div>
                 ))}
               </div>
             </div>
-          </div>
-          <div className="absolute right-[clamp(1rem,4vw,3rem)] top-[1.4rem] hidden lg:block">
-            <ThemedImage
-              alt="DocusaurOps Logo"
-              className="w-[clamp(100px,12vw,160px)] opacity-[0.92]"
-              sources={{ light: logoLight, dark: logoDark }}
-            />
           </div>
         </section>
 

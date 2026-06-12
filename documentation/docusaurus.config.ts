@@ -71,8 +71,8 @@ const config: Config = {
       title: 'DocusaurOps Home Portal',
       logo: {
         alt: 'DocusaurOps Logo',
-        src: 'img/logo-light.svg',
-        srcDark: 'img/logo-dark.svg',
+        src: 'img/logo.png',
+        srcDark: 'img/logo.png',
       },
       items: [
         {to: 'docs/intro', label: 'DocusaurOps at glance', position: 'left'}, 

@@ -93,4 +93,3 @@ Argument-to-variable mapping:
 - After the archive is downloaded, use only local file operations for extraction and copy/merge.
 - Never create commits on behalf of the user without explicit permission.
 - Before running any `git commit`, ask the user for approval first.
-
