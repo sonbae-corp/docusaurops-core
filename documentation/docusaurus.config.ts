@@ -79,6 +79,7 @@ const config: Config = {
         {to: 'docs/architecture', label: 'How it works', position: 'left'}, 
         {to: 'docs/deployment', label: 'Deployment Guide', position: 'left'}, 
         {to: 'docs/getting_started', label: 'Getting started', position: 'left'}, 
+        {to: 'docs/playground', label: 'Test it by yourself!', position: 'right'}, 
         {
           href: 'https://github.com/FranckyC/agents-league-docusaurops',
           position: 'right',

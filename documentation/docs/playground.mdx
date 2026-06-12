@@ -1,0 +1,184 @@
+---
+title: "Test it by yourself!"
+sidebar_position: 3
+---
+
+import GitHubForkRepo from './img/github_fork.png';
+import GitHubClone from './img/github_clone.png';
+import GitHubInstallMarketplace from './img/github_install_marketplace.png';
+import CopilotRequestNewSite from './img/copilot_request_new_site.png';
+import CopilotPluginOutput from './img/copilot_plugin_cli_output.png';
+import VSCodeCommitAndPush from './img/vscode_comminit_and_push.png';
+import GithubCreatePr from './img/github_create_pr.png';
+import GitHubPrdetails from './img/github_pr_details.png';
+import DocusaurusSiteOverview from './img/docusaurus_site_overview.png';
+import GitHbPrMerge from './img/github_pr_merge.png';
+import GithubTrigger from './img/github_deploy_trigger.png';
+import GitHubNewSite from './img/github_actions_new_site_url.png';
+import DocusaurOpsFinalresult from './img/docusaurops_final_results.png';
+
+Try the DocusaurOps documentation setup flow yourself in our playground environment.
+
+This walkthrough is designed to be hands-on, so you can quickly experience how simple the setup process is.
+
+:::info
+Most other skills require access to a hosting environment account, so they are not as easy to test in a shared playground.
+
+If you want to test everything, you can create your own environment as described in the documentation.
+:::
+
+> Before you begin, make sure you have completed all prerequisites listed in [Getting Started](getting_started.mdx).
+
+## Playground Procedure
+
+## Phase 1: Prepare your workspace
+
+Complete these steps once to get your local environment ready.
+
+### 1. Fork the test repository
+
+   Fork [https://github.com/sonbae-corp/docusaurops-test](https://github.com/sonbae-corp/docusaurops-test) to your own GitHub account.
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={GitHubForkRepo} />
+   </div>
+
+### 2. Clone your fork locally
+
+   Clone the repository on your machine and ensure the `main` branch is checked out.
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={GitHubClone} />
+   </div>
+
+### 3. Install the marketplace plugin and DocusaurOps plugin
+
+   Use Copilot CLI to install both plugins:
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={GitHubInstallMarketplace} />
+   </div>
+
+   ```bash
+   copilot plugin marketplace add your-org/docusaurops-core
+   copilot plugin install docusaurops@docusaurops-plugins
+   ```
+
+## Phase 2: Generate a documentation site
+
+Use the DocusaurOps agent to scaffold your documentation project and preview it locally.
+
+### 4. Start Copilot CLI and select the DocusaurOps agent
+
+   Run `copilot`, then switch to the `DocusaurOps Agent` with the `/agent` command.
+
+### 5. Ask the agent to create a new documentation site
+
+   Use this prompt:
+
+   ```bash
+   Setup a documentation site for project "<name or your project>" with url "<your url slug>"
+   ```
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={CopilotRequestNewSite} />
+   </div>
+
+   :::info
+   Choose a unique URL slug, because deployments happen in shared infrastructure.
+
+   You can test whether a slug is already used at:
+   [https://docusaurops-demotest.canadacentral.cloudapp.azure.com/your_slug](https://docusaurops-demotest.canadacentral.cloudapp.azure.com/your_slug)
+   :::
+
+### 6. Follow the agent instructions until completion
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={CopilotPluginOutput} />
+   </div>
+
+### 7. Run the Docusaurus dev server
+
+   From the generated `/documentation` folder, run:
+
+   ```bash
+   npm run start
+   ```
+
+   Your site should be available at `http://localhost:3000/your-site-slug`.
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={DocusaurusSiteOverview} />
+   </div>
+
+## Phase 3: Submit your changes
+
+Publish your generated site by pushing to your fork and opening a pull request.
+
+### 8. Commit and push all generated changes to your fork
+
+   Push to your fork's `main` branch.
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[30%]" src={VSCodeCommitAndPush} />
+   </div>
+
+### 9. Open a pull request from your fork to the original repository
+
+   Create a PR targeting `main` in:
+   [https://github.com/sonbae-corp/docusaurops-test](https://github.com/sonbae-corp/docusaurops-test)
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={GithubCreatePr} />
+   </div>
+
+   Fill in the PR title and description.
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={GitHubPrdetails} />
+   </div>
+
+## Phase 4: Deployment and validation
+
+After merge, wait for deployment to finish and verify the final site URL.
+
+### 10. Wait for deployment processing on our side
+
+   We will receive your PR and create a dedicated branch to trigger deployment logic.
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={GitHbPrMerge} />
+   </div>
+
+   After merge, GitHub Actions will start deployment in our infrastructure.
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={GithubTrigger} />
+   </div>
+
+   After a few minutes, you should see the URL of your new site.
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={GitHubNewSite} />
+   </div>
+
+   :::info
+   If the site does not respond immediately, wait a bit.
+
+   Deployment can take up to 20 minutes in this demo infrastructure.
+   :::
+
+   :::warning
+   The Azure Application Gateway uses a self-signed certificate for demo purposes.
+
+   Your browser may show a security warning. Accept the risk to continue.
+   :::
+
+### 11. Confirm your site is live
+
+   Congratulations. You have completed the end-to-end documentation setup workflow.
+
+   <div className="flex justify-center mb-10">
+   <img className="w-[50%]" src={DocusaurOpsFinalresult} />
+   </div>
+

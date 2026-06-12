@@ -67,6 +67,7 @@ const cards = [
 
 const primaryBtn = 'no-underline rounded-[10px] font-bold py-[0.78rem] px-[1.2rem] transition-[transform,box-shadow,border-color] duration-200 ease-in-out text-[#04111c] bg-[linear-gradient(120deg,#72dfbf,#20c997)] shadow-[0_16px_28px_rgba(32,201,151,0.27)] hover:-translate-y-px hover:shadow-[0_20px_32px_rgba(32,201,151,0.35)]';
 const ghostBtn = 'no-underline rounded-[10px] font-bold py-[0.78rem] px-[1.2rem] transition-[transform,box-shadow,border-color] duration-200 ease-in-out text-[#dce7ff] border border-[rgba(195,208,238,0.6)] bg-[rgba(5,12,30,0.5)] hover:-translate-y-px hover:border-[#f7fbff]';
+const violetBtn = 'no-underline rounded-[10px] font-bold py-[0.78rem] px-[1.2rem] transition-[transform,box-shadow,filter] duration-200 ease-in-out text-[#f8f3ff] bg-[linear-gradient(120deg,#8b5cf6,#7c3aed)] shadow-[0_16px_28px_rgba(124,58,237,0.33)] hover:-translate-y-px hover:shadow-[0_22px_34px_rgba(124,58,237,0.42)] hover:brightness-110';
 
 export default function Home() {
   const { siteConfig } = useDocusaurusContext();
@@ -158,7 +159,8 @@ export default function Home() {
             </p>
             <div className="flex flex-wrap gap-[0.85rem]">
               <a href="/docs/getting_started" className={primaryBtn}>Get Started with the plugin</a>
-              <a href="/docs/deployment" className={ghostBtn}>Deploy it to your org!</a>
+              <a href="/docs/deployment" className={ghostBtn}>Deploy DocusaurOps platform into your org</a>
+              <a href="/docs/playground" className={violetBtn}>Test it by yourself using our playground</a>
             </div>
             <div className="max-w-[850px] mt-2 rounded-2xl border border-[rgba(183,241,221,0.35)] bg-[rgba(2,8,22,0.76)] shadow-[0_24px_42px_rgba(2,8,24,0.48)] overflow-hidden backdrop-blur-[8px]">
               <div className="border-b border-[rgba(195,208,238,0.2)] py-[0.7rem] px-[0.85rem] flex items-center gap-[0.4rem]">
