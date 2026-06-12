@@ -23,8 +23,8 @@ const commands = [
     video: 'https://www.youtube.com/embed/xGUISHrJpyo'
   },
   {
-    comment: '// Generate specifications from a SharePoint document',
-    cmd: `copilot --agent docusaurops:docusaurops --prompt "Generate specifications from document https://myorg.sharepoint.com/sites/hr-smart-assistant/Shared Documents/projects_requirements.docx"`,
+    comment: '// Generate specifications from a document',
+    cmd: `copilot --agent docusaurops:docusaurops --prompt "Generate specifications from requirements document https://myorg.sharepoint.com/sites/hr-smart-assistant/Shared Documents/projects_requirements.docx"`,
     video: 'https://www.youtube.com/embed/cUkXb5Wmd3o',
   },
 ];
@@ -33,14 +33,17 @@ const pillars = [
   {
     title: 'GitHub Copilot CLI + VS Code Native',
     description: 'Run the same documentation automation workflow from terminal or editor with consistent behavior.',
+    icon: '/img/gh_copilot.svg',
   },
   {
     title: 'Documentation-As-Code Lifecycle',
     description: 'Generate, version, review, and deploy Markdown documentation using the well-known Docusaurus tool',
+    icon: '/img/docusaurus.svg',
   },
   {
     title: 'Search-Ready Knowledge Mesh',
     description: 'Expose documentation through Copilot connectors and WorkIQ and create an organizational knowledge mesh network.',
+    icon: '/img/knowledge-graph.svg',
   },
 ];
 
@@ -53,12 +56,12 @@ const cards = [
   {
     title: "Operate one 'self-service' shared platform",
     description: 'Host and scale multiple team sites on one Azure foundation with reusable IaC and workflow orchestration supporting an on-demand strategy.',
-    href: '/docs/deployment',
+    href: '/docs/getting_started',
   },
   {
-    title: 'Access organizational knowledge with WorkIQ',
-    description: 'Use the DocusaurOps agent to retrieve architecture, process, and runbook knowledge instantly leveraging WorkIQ tools.',
-    href: '/docs/development/intro',
+    title: 'Access and feed organizational knowledge with WorkIQ',
+    description: 'Use the DocusaurOps agent to retrieve architecture, process, and runbook knowledge instantly leveraging WorkIQ tools like Word MCP Server and WorkIQ CLI.',
+    href: '/docs/development/getting_started',
   },
 ];
 
@@ -150,8 +153,8 @@ export default function Home() {
               alt="DocusaurOps Lifecycle"
               className="w-full h-auto block"
             />
-            <p className="m-0 max-w-[66ch] text-[#c4d0ea] text-[clamp(1rem,1.4vw,1.2rem)] leading-[1.72]">
-              DocusaurOps combines infrastructure automation, docs-as-code templates, and Microsoft WorkIQ-powered tools as a self-service approach so teams can write and rely on top-quality documentation to deliver their projects.
+            <p className="m-0 max-w-[66ch] text-[#c4d0ea] text-[clamp(1rem,1.4vw,1.2rem)] leading-[1.72] mt-4">
+              DocusaurOps unifies infrastructure automation, docs‑as‑code templates, and Microsoft WorkIQ intelligence to eliminate the hassle of documentation setup, allowing your teams to produce reliable, high‑quality content throughout the entire project lifecycle.
             </p>
             <div className="flex flex-wrap gap-[0.85rem]">
               <a href="/docs/getting_started" className={primaryBtn}>Get Started with the plugin</a>
@@ -192,9 +195,12 @@ export default function Home() {
 
         <section className="px-[clamp(1rem,4vw,3rem)]">
           <div className="max-w-[1220px] mx-auto grid gap-4 grid-cols-1 lg:grid-cols-3">
-            {pillars.map(({ title, description }) => (
+            {pillars.map(({ title, description, icon }) => (
               <article key={title} className={styles.pillarCard}>
-                <h2 className="m-0 font-['Space_Grotesk',sans-serif] text-[1.16rem]">{title}</h2>
+                <div className="flex items-center gap-[0.6rem]">
+                  {icon && <img src={icon} alt="" aria-hidden="true" className="w-6 h-6 shrink-0" />}
+                  <h2 className="m-0 font-['Space_Grotesk',sans-serif] text-[1.16rem]">{title}</h2>
+                </div>
                 <p className="mt-[0.72rem] mb-0 text-[var(--ifm-font-color-secondary)] leading-[1.66]">{description}</p>
               </article>
             ))}
@@ -204,7 +210,7 @@ export default function Home() {
         <section className="px-[clamp(1rem,4vw,3rem)]">
           <div className="max-w-[1220px] mx-auto">
             <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end items-start gap-4 mb-4">
-              <h2 className="m-0 font-['Space_Grotesk',sans-serif] text-[clamp(1.45rem,2.2vw,2rem)]">From template to searchable platform</h2>      
+              <h2 className="m-0 font-['Space_Grotesk',sans-serif] text-[clamp(1.45rem,2.2vw,2rem)]">From template to searchable and collaborative documentation platform</h2>      
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               {cards.map(({ title, description, href }) => (

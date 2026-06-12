@@ -4,9 +4,6 @@ sidebar_position: 1
 toc_max_heading_level: 4
 ---
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 <div className="not-prose mb-10 rounded-2xl overflow-hidden border border-[var(--ifm-table-border-color)] bg-[linear-gradient(135deg,rgba(32,201,151,0.12),rgba(91,141,255,0.10))]">
   <div className="px-8 py-10">
     <p className="text-[0.75rem] font-bold tracking-[0.12em] uppercase text-[var(--ifm-color-primary)] mb-3">The Knowledge Platform for Engineering Teams</p>
@@ -45,7 +42,7 @@ Documentation becomes a burden — done at the end of projects, rushed, unstruct
 
 <div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
   {[
-    { icon: "🗂️", text: "All technical documentation centralized, searchable, and accessible — regardless of format." },
+    { icon: "🗂️", text: "All technical documentation centralized, searchable, and accessible — regardless of format, right from where developers work, in Visual Studio Code." },
     { icon: "⚡", text: "Teams instantly find what they need without guessing where to look." },
     { icon: "🔄", text: "Knowledge structured, consistent, and maintained over time." },
     { icon: "🤝", text: "Technical teams, BAs, security, and stakeholders share a common reference point." },
@@ -71,42 +68,28 @@ Your teams will thank you too.
 
 ## How DocusaurOps Makes This Real
 
-<Tabs>
-  <TabItem value="setup" label="🚀 Get started in minutes" default>
-
-Install the GitHub Copilot plugin, tell the agent:
-
-```
-"Setup documentation for my project"
-```
-
-DocusaurOps handles the rest — scaffolding the Docusaurus site, deploying it to the shared platform, and wiring up the CI/CD pipeline. No hosting setup, no authentication configuration, no manual pipeline authoring.
-
-  </TabItem>
-  <TabItem value="search" label="🔎 Unified search">
-
-Every site created with DocusaurOps is automatically crawled and indexed under a single URL. Your documentation gets a free, organization-wide search.
-
-  </TabItem>
-  <TabItem value="agent" label="🤖 Ask the agent">
-
-All indexed content is made available through the **DocusaurOps agent**, directly in **Copilot CLI and VS Code**. Ask questions like:
-
-- *"Where is the documentation for project X?"*
-- *"What are the best practices for Y?"*
-- *"Who owns the runbook for Z?"*
-
-And get instant answers sourced from all content across the organization.
-
-  </TabItem>
-</Tabs>
-
----
-
-:::note Scope & Limitations
-| Topic | What to expect |
-|---|---|
-| **Permissions** | No access control system. Content published is assumed suitable for broad internal sharing. |
-| **Content ownership** | Teams are responsible for their own content — ensure nothing confidential is published. |
-| **Hosting scope** | Documentation sites only. DocusaurOps is not a general-purpose hosting platform. |
-:::
+<div className="not-prose rounded-2xl border border-[rgba(32,201,151,0.35)] bg-[rgba(91,141,255,0.06)] px-5 py-5 my-6">
+  <p className="text-[0.75rem] font-bold tracking-[0.12em] uppercase text-[var(--ifm-color-primary)] mb-2">1. Get started in minutes</p>
+  <p className="m-0 leading-relaxed text-[var(--ifm-font-color-base)]">Install the GitHub Copilot plugin, then tell the agent:</p>
+  <pre className="mt-4 mb-0 overflow-x-auto rounded-xl bg-[rgba(2,8,22,0.7)] px-4 py-3 text-sm text-[#dce7ff]"><code>$ copilot -p "Setup documentation for my project 'XYZ'"</code></pre>
+  <p className="mt-4 mb-0 leading-relaxed text-[var(--ifm-font-color-secondary)]">DocusaurOps handles the rest — scaffolding the Docusaurus site, deploying it to the shared platform, and wiring up the CI/CD pipeline. <strong>No hosting setup, no authentication configuration, no manual pipeline authoring</strong>.</p>
+</div>
+<div className="not-prose rounded-2xl border border-[rgba(91,141,255,0.30)] bg-[rgba(91,141,255,0.06)] px-5 py-5 my-6">
+  <p className="text-[0.75rem] font-bold tracking-[0.12em] uppercase text-[var(--ifm-color-primary)] mb-2">2. Search the whole org</p>
+  <p className="m-0 leading-relaxed text-[var(--ifm-font-color-base)]">Every site created with DocusaurOps is published under a single URL and indexed through a native Copilot Connector. That gives your organization one searchable entry point instead of dozens of disconnected docs. Faster discovery, less duplication, and a knowledge base that works with the tools your teams already use.</p>
+</div>
+<div className="not-prose rounded-2xl border border-[rgba(32,201,151,0.25)] bg-[rgba(91,141,255,0.06)] px-5 py-5 my-6">
+  <p className="text-[0.75rem] font-bold tracking-[0.12em] uppercase text-[var(--ifm-color-primary)] mb-2">3. Ask the agent directly</p>
+  <p className="m-0 leading-relaxed text-[var(--ifm-font-color-base)]">All indexed content is available through the <strong>DocusaurOps agent</strong> in <strong>Copilot CLI and VS Code</strong>. Ask questions like:</p>
+  <ul className="mt-4 mb-0 pl-5 space-y-2 text-[var(--ifm-font-color-secondary)] leading-relaxed">
+    <li><em>Where is the documentation for project X?</em></li>
+    <li><em>What are the best practices for Y?</em></li>
+    <li><em>Who owns the runbook for Z?</em></li>
+  </ul>
+  <p className="mt-4 mb-0 text-[var(--ifm-font-color-secondary)] leading-relaxed">The answers come back instantly from the full organizational knowledge base.</p>
+</div>
+<div className="not-prose rounded-2xl border border-[rgba(183,241,221,0.28)] bg-[rgba(91,141,255,0.06)] px-5 py-5 my-6">
+  <p className="text-[0.75rem] font-bold tracking-[0.12em] uppercase text-[var(--ifm-color-primary)] mb-2">4. Make it work for everyone</p>
+  <p className="m-0 leading-relaxed text-[var(--ifm-font-color-base)]">DocusaurOps is not just for developers. By centralizing documentation and making it accessible through web and agent channels, it helps business analysts, security teams, and other stakeholders stay aligned.</p>
+  <p className="mt-4 mb-0 leading-relaxed text-[var(--ifm-font-color-secondary)]">The documentation evolves with the solution and becomes the true single source of truth, reducing duplication and keeping everyone on the same page.</p>
+</div>

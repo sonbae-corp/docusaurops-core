@@ -94,7 +94,7 @@ const config: Config = {
         },
         {
           href: process.env.ENV_AZURE_DOCUSAUROPS_SITE_URL ? process.env.ENV_AZURE_DOCUSAUROPS_SITE_URL : '/',
-          label: 'docusaurOps Home',
+          label: 'DocusaurOps Home',
           position: 'right',
         }
       ],

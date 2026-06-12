@@ -8,23 +8,23 @@ import ComplianceSkillsArchitecture from './img/docusaurops_docs-compliance_arch
 
 # How it works
 
-DocusaurOps is an architecture pattern that any company can adopt to rationalize technical documentation across teams and projects — as a fully self-service experience. It is also a foundation for a customizable AI-SDLC approach, where teams can write their own skills using the same underlying techniques.
+DocusaurOps is first of all **an architecture pattern** that any company can adopt to rationalize technical documentation across teams and projects — as a fully self-service experience. It is also a foundation for a customizable AI-SDLC approach, where teams can write their own skills using the same underlying techniques.
 
 The solution is built on the following key components:
 
 | Component | Role |
 |-----------|------|
 | **GitHub Copilot plugin** | Available in VS Code Chat and GitHub Copilot CLI |
-| **Azure Application Gateway** | Routes incoming requests to the right documentation site |
+| **Azure Application Gateway** | Routes incoming requests to the right documentation site. This is where the aggregation takes place. |
 | **Docusaurus** | Static site generator enabling a documentation-as-code approach |
-| **GitHub Actions & reusable workflows** | Automates deployment end-to-end |
+| **GitHub Actions & reusable workflows** | Automates deployment end-to-end through CI/CD pipelines |
 | **Copilot Connector** | Indexes all sites for AI-powered search (Enterprise Websites) |
-| **WorkIQ** | Reads and writes Word documents; powers compliance document generation |
+| **WorkIQ** | Reads and writes Word documents through Microsft 365 remote WorkIQ Word MCP Server + WorkIQ CLI to retrieve content from the Copilot connector. |
 
-One of the goals of this solution is to demonstrate what it takes — from an architectural standpoint — for an AI-powered solution to be truly valuable, and how all components must work together to form a coherent whole.
+:::info 
+One of the goals of this solution is to demonstrate what it takes — from an architectural standpoint — for an AI-powered solution to be truly valuable, and how all components must work together to form a coherent whole that translates into a real organizational strategy, not just a standalone fancy agent.
 
-:::info
-The solution showcaes this two different scnarios but could support many more. The architecture is designed to be modular and extensible, allowing for new skills and capabilities to be added over time!
+The solution showcases these two different scenarios but could support many more. The architecture is designed to be modular and extensible, allowing for new skills and capabilities to be added over time!
 :::
 
 ---
@@ -41,18 +41,19 @@ The solution showcaes this two different scnarios but could support many more. T
 
 Developers install the DocusaurOps plugin from their company marketplace — a dedicated GitHub repository configured to host the plugin definition. The plugin works in both VS Code Chat and GitHub Copilot CLI, so developers can choose the experience that suits them best.
 
-> Short video here showing the installation process in both experiences.
 
 **2. Initialize a new documentation site**
 
-From the plugin, developers trigger the **"Setup documentation"** command. They provide basic information — project name and desired URL slug — and the plugin takes care of the rest. The `/docs-setup` skill clones the latest documentation structure from a dedicated template repository, maintained separately, using the GitHub CLI and the developer's own credentials. This separation of template from plugin means:
-- The template can be updated independently, without touching the plugin.
+From the plugin, developer triggers the **"Setup documentation"** skill. He provides basic information — project name and desired URL slug — and the plugin takes care of the rest.
+
+Uusing the GitHub CLI and the developer's own credentials, the `/docs-setup` skill clones the latest documentation structure from a dedicated template repository and reads the `INSTRUCTIONS.md` file telling him the template rules to follow (ex: new site vs update).
+
+ This separation of template repository from plugin means:
+- The template can be updated independently, without touching the plugin, allowing multiple versions and instructions.
 - Changes are tracked with a full history and clear diffs.
 - Migration paths are embedded directly in the template as instructions for the plugin (via a dedicated .md file).
 
-An environment file is generated in the repository containing all deployment metadata (site name, slug, description, contact information, etc.), and all placeholder values are replaced automatically.
-
-> Short video here showing the plugin in action and the resulting output.
+An environment file (`.env.docusaurops`) is generated in the repository containing all deployment metadata (site name, slug, description, contact information, etc.), and all placeholder values are replaced automatically.
 
 **3. Write, preview, and deploy**
 
@@ -62,19 +63,19 @@ Developers write their documentation locally using the Docusaurus structure and 
 - Configures authentication on the new app.
 - Deploys the site content from the caller repository.
 
-**No credentials or variables need to be set up by the developer — everything is resolved automatically**.
-
-> Short video here showing the deployment running in GitHub and the result on Azure.
+**No credentials or variables need to be set up by the developer — everything is resolved automatically**. That is where is DocusaurOps really shines as a self-service solution: the complexity of deployment is completely abstracted away, making it accessible to any team regardless of their DevOps expertise.
 
 **4. Site goes live and gets indexed**
 
-The new site is published under the root URL `https://docs.my-company.com/{site_slug}` and automatically indexed by the Microsoft "Enterprise Websites" Copilot Connector, using the `sitemap.xml` dynamically generated by the root web application.
+The new site is published under the root URL `https://docs.my-company.com/{site_slug}` and automatically indexed by the Microsoft "Enterprise Websites" Copilot Connector, using a `sitemap.xml` file dynamically generated by the root web application.
 
-> Short video here showing the live site on Azure.
+Using a single URL for all documentation sites allows the organization to have a unified, searchable knowledge base without needing to index every GitHub repository one by one. DocusaurOps scales by itself as long teams creates their sites.
 
 **5. Searchable across the entire company**
 
 Using the `/docs-ask` skill and WorkIQ CLI, developers can now ask questions across all projects where documentation exists in DocusaurOps— *"How was feature XYZ implemented in project ABC?"* — creating a mesh of shared knowledge across the entire organization including also all benefits of the WorkIQ stack for user context awareness.
+
+Using WorkIQ, all additional information regarding projects are also retrivable taking care of the developer context (SharePoint sites, email, etc.) and the agent can even proactively suggest relevant documentation based on the developer's current work and needs.
 
 :::tip A virtuous cycle
 The more teams adopt the platform, the richer the shared knowledge becomes. Content added by one team becomes a reference for others, continuously improving quality across the organization — organically.
@@ -90,7 +91,7 @@ The more teams adopt the platform, the richer the shared knowledge becomes. Cont
 
 Documentation is not just about explaining how a solution works. It is also a compliance and traceability artifact. DocusaurOps also addresses a common organizational pain point: **keeping formal documents made by non-technical stakeholders (like business analysts, product owners, etc.) in sync with the actual implementation**.
 
-The goal is to foster collaboration between project stakeholders on documentation and specifications — specifically around two scenarios that appear in most organizations: **aligning requirements between business analysts and technical teams**, and **generating Software Design Documents for formal review**.
+The goal is to foster collaboration between project stakeholders on documentation and specifications — specifically around a scenario that appears in most organizations: **aligning requirements between business analysts and technical teams**.
 
 ### Turn requirements into workable issues
 
@@ -107,7 +108,3 @@ The plugin uses the WorkIQ Word MCP server to read the document and format its c
 **3. Create GitHub issues**
 
 The finalized specifications are created as issues in the GitHub project associated with the repository — ready for the team to plan and implement.
-
-**4. Automated PR review**
-
-Once a PR is submitted, a GitHub cloud agent reviews the implementation against the associated requirement specification and the existing documentation. The agent adds feedback and comments directly in the PR to help developers align their implementation with the requirements.

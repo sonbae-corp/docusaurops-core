@@ -31,12 +31,14 @@ import TabItem from '@theme/TabItem';
 
 # Deployment guide
 
-Use this guide to deploy DocusaurOps in Azure and enable teams to provision documentation sites from GitHub Copilot.
+Use this guide to deploy DocusaurOps in your own organization
 
 ## Prerequisites
 
 | Requirement | Notes |
 |-------------|-------|
+| [Azure tenant with owner subscription rights](https://azure.microsoft.com/en-ca/free/) | Required for core infrastructure deployment. |
+| [Microsoft 365 tenant](https://www.microsoft.com/en/microsoft-365/business) | Required for WorkIQ MCP and Word integration + Create Copilot Conenctor |
 | [GitHub Copilot license](https://github.com/features/copilot/plans) | Required |
 | [Visual Studio Code](https://code.visualstudio.com/) | Required |
 | [Git](https://git-scm.com/) | Required |
@@ -74,11 +76,11 @@ You can create an organization for free for testing purposes: [https://github.co
 
 ## Step 2 - Create Entra ID service principals (SPNs)
 
-The solution uses two SPNs in Entra ID to function:
+The solution uses two service principals in Entra ID to function:
 
 1. **DocusaurOps - Auth**
 
-    Used by individual sites for EasyAuth login in (if authentication is enabled). A unique SPN is hsared by all sites.
+    Used by individual sites for EasyAuth login in in the Azure App Services (if authentication is enabled). A unique SPN is shared by all sites.
 
     In the manifest, ensure **Enable ID token issuance** is enabled:
 
@@ -112,7 +114,7 @@ The solution uses two SPNs in Entra ID to function:
         Also add permission `Application.ReadWrite.OwnedBy` to the deploy SPN and grant admin consent.
 
     :::info Why not use managed identity + federated credentials for deployment from GitHub actions?
-    Federated credentials must be pre-created per repository. Because consumer repositories are not always known in advance, client ID + client secret offers simpler onboarding at scale.
+    Federated credentials must be pre-created per repository. Because consumer repositories are not known in advance, client ID + client secret offers simpler onboarding at scale.
     :::
 
 ## Step 3 - Create GitHub organization secrets and variables
@@ -124,7 +126,7 @@ Create these org-level secrets so consumer repos can call reusable workflows in 
     | Secret name | Description |
     |-------------|-------------|
     | `DOCUSAUROPS_REPO_TOKEN` | GitHub token with access to the `docusaurops-core` repository. |
-    | `DOCUSAUROPS_AZURE_DEPLOY_CREDS` | Azure credentials used by `azure/login@v3`. |
+    | `DOCUSAUROPS_AZURE_DEPLOY_CREDS` | Azure credentials used by `azure/login@v3` to deploy resources. |
 
     <Tabs defaultValue="repo-token" values={[
     { label: 'DOCUSAUROPS_REPO_TOKEN', value: 'repo-token' },
@@ -132,13 +134,13 @@ Create these org-level secrets so consumer repos can call reusable workflows in 
     ]}>
     <TabItem value="repo-token">
 
-    In GitHub, go to profile settings → Developer settings → Personal access tokens → Tokens (classic), and create a token scoped to `docusaurops-core` with:
+    In GitHub, go to profile settings → Developer settings → Personal access tokens → Tokens (classic), and create a token scoped to the `docusaurops-core` repository with:
 
     - Read access to actions variables, code, environments, and metadata
     - Read and Write access to actions
 
     <div className="flex justify-center mb-10">
-    <img className="w-[50%]" src={GhTokenPermissions}/>
+        <img className="w-[50%]" src={GhTokenPermissions}/>
     </div>
 
     </TabItem>
@@ -165,9 +167,8 @@ Add both secrets at the GitHub organization level:
 </div>
 
 :::info
-If you cannot manage organization secrets, add equivalent repository-level secrets in each consumer repository.
+If you cannot manage organization secrets, you canadd equivalent repository-level secrets in each consumer repository.
 Organization-level secrets are strongly recommended for scalability and governance.
-If needed, you can create a GitHub organization here: https://github.com/organizations/plan.
 :::
 
 ### Create variables
@@ -194,7 +195,7 @@ If needed, you can create a GitHub organization here: https://github.com/organiz
 This solution uses Azure Application Gateway, which incurs cost. Review pricing before deployment:
 https://azure.microsoft.com/en-ca/pricing/calculator/
 
-To reduce cost when idle:
+To reduce cost when idle, you can stop the Application Gateway when not in use with this Azure CLI command:
 
 ```powershell
 # 1. Fetch the Application Gateway details
@@ -205,10 +206,18 @@ Stop-AzApplicationGateway -ApplicationGateway $AppGw
 ```
 :::
 
+### Clone the `docusaurops-core` repository
+
+1. Clone the `docusaurops-core` repository created in Step 1 to your local machine and open it in Visual Studio Code.
+
 ### Generate a self-signed certificate
 
-This certificate secures HTTPS on Application Gateway. For production, use a trusted CA certificate. Domain format must be:
+To secure the application gateway with HTTPS, you need a certificate. For testing purposes, you can generate a self-signed certificate using the provided PowerShell script. For production use, you should obtain a certificate from a trusted Certificate Authority (CA).
+
+For the self-signed certificate, the domain format must be:
 `docusaurops-<ENV_AZURE_ENV_NAME>.<ENV_AZURE_DEPLOY_LOCATION>.cloudapp.azure.com` (example: `docusaurops-my-env.canadacentral.cloudapp.azure.com`).
+
+1. From the `docusaurops-core` repository root, run the following PowerShell command to generate a self-signed certificate:
 
 ```powershell
 .\scripts\New-SelfSignedCertificate.ps1 -Domain "docusaurops-demotest.canadacentral.cloudapp.azure.com" -PfxPassword (ConvertTo-SecureString "bAfD2m9..." -AsPlainText -Force) -InstallRootCA
@@ -216,7 +225,8 @@ This certificate secures HTTPS on Application Gateway. For production, use a tru
 
 This command also installs the root certificate locally so browsers trust the site.
 The script outputs the PFX as base64 and copies it to your clipboard.
-You will use this value for `ENV_AZURE_DOCUSAUROPS_CERT_BASE64_PFX`.
+
+2. Save this value as you will use it for `ENV_AZURE_DOCUSAUROPS_CERT_BASE64_PFX`.
 
 :::important
 The certificate PFX is referenced by `templates/main.bicep` during core provisioning.
@@ -224,7 +234,7 @@ The certificate PFX is referenced by `templates/main.bicep` during core provisio
 
 ### Configure core repository variables and secrets
 
-Add the following variables in the core repository (`docusaurops-core`) (Settings → Variables):
+1. In GitHub settings, add the following variables in the core repository (`docusaurops-core`) (Settings → Variables):
 
 **Variables**
 
@@ -252,7 +262,7 @@ Add the following variables in the core repository (`docusaurops-core`) (Setting
 
 ### Run core deployment workflow
 
-In the core repository, run workflow **Deploy DocusaurOps Core Infrastructure** from `main`.
+In the core repository from GitHub, run workflow **Deploy DocusaurOps Core Infrastructure** from `main`.
 
 Expected result: Azure core resources and root site deployed.
 
@@ -267,8 +277,8 @@ Deployment uses subscription-level deployment stack.
 For production, trigger deployments from branch workflows with environment-specific variables.
 :::
 
-After deployment, add variable `ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME` in the core repo.
-This is used by deploy-site scripts to update sitemap settings in the root app.
+After deployment, add variable `ENV_AZURE_DOCUSAUROPS_ROOT_WEBAPP_NAME` in the GitHub core repo settings.
+This value is used by deploy-site scripts to update sitemap settings in the root app and is only known after the initital deployment.
 
 | Variable name | Description | Example |
 |---|---|---|
@@ -278,7 +288,7 @@ This is used by deploy-site scripts to update sitemap settings in the root app.
 
 Before publishing plugin files in GitHub marketplace, resolve template tokens.
 
-From repository root, run:
+1. From repository root, run:
 
 ```powershell
 ./plugins/init-plugin.ps1 -Tokens @{ `
@@ -288,14 +298,14 @@ From repository root, run:
     -Verbose 
 ```
 
-This command replaces tokens in `.template` files and generates final plugin files.
+This command replaces tokens in `.template` files and generates final plugin files, like values skills must use as default for your organization.
 Template files are then deleted to avoid runtime conflicts.
 
-Commit generated files to the core repository.
+2. Commit generated files to the core repository.
 
 ## Step 6 - Prepare a consumer test repository
 
-Clone your test repo (example: `docusaurops-test`) and create a new branch from `main`.
+Clone your test repo (example: `docusaurops-test`) and create a new branch from `main` (which should be empty at that point).
 
 This keeps full-cycle tests repeatable and easy to reset.
 
@@ -398,7 +408,7 @@ Then run `/mcp list` and confirm MCP connectivity:
 We recommend **Claude Sonnet 4.6** for best results, but you can use any available model.
 :::
 
-5. Login to GitHub CLI if needed:
+5. Login to GitHub CLI:
 
 ```bash
 gh auth login
@@ -419,6 +429,14 @@ Expected result:
 - Values adapted for the target repository.
 - `.github/workflows/deploy-docs.yml` created and wired to reusable workflows in core repo.
 
+7. Commit all changes to your branch and push to GitHub. This should trigger the deployment workflow and deploy your first documentation site.
+
+:::info
+The deployment can take up to 15 minutes as it provisions Azure resources. Monitor progress in GitHub Actions and Azure Portal.
+After deployment, the new site should be accessible at:
+`https://<site-name>.<ENV_AZURE_DEPLOY_LOCATION>.cloudapp.azure.com/{site-slug}`
+:::
+
 </TabItem>
 <TabItem value="vscode">
 
@@ -433,78 +451,80 @@ Expected result:
 
 ## Step 8 - Create Enterprise Websites Copilot connector
 
-Go to: https://admin.cloud.microsoft.com/ → Copilot → Connectors → Add Connection
+1. Go to: https://admin.cloud.microsoft.com/ → Copilot → Connectors → Add Connection
 
-Choose connector type:
+    Choose connector type:
 
-- **Enterprise websites Cloud** if your site is public.
-- **Enterprise websites On-premises** if your site is private/internal.
+    - **Enterprise websites Cloud** if your site is public.
+    - **Enterprise websites On-premises** if your site is private/internal (this requires you to setup a Graph Connector Agent).
 
-Configuration steps are otherwise the same.
+    Configuration steps are otherwise the same.
 
 ### Configure connector
 
-On first page, click **Custom setup** and configure:
+1. On first page, click **Custom setup** and configure:
 
-- Display name (example: `DocusaurOps Sites`)
-- URL: root site URL (example: `https://docusaurops-my-env.canadacentral.cloudapp.azure.com`)
-- Enable **Sync only websites listed in the sitemap**
-- Authentication:
-  - **Anonymous** if root site has no auth.
-  - **OAuth 2.0 Client Credentials** if Entra auth is enabled on root site:
-    - Resource ID: `ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID`
-    - Client ID: same value
-    - Client secret: `ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_SECRET`
+    - Display name (example: `DocusaurOps Sites`)
+    - URL: root site URL (example: `https://docusaurops-my-env.canadacentral.cloudapp.azure.com`)
+    - Enable **Sync only websites listed in the sitemap**
+    - Authentication:
+    - **Anonymous** if root site has no auth.
+    - **OAuth 2.0 Client Credentials** if Entra auth is enabled on root site:
+        - Resource ID: `ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_ID`
+        - Client ID: same value
+        - Client secret: `ENV_AZURE_DOCUSAUROPS_ENTRA_ID_CLIENT_SECRET`
 
-:::warning
-If you change root-site authentication mode after connector creation, recreate the connector.
-:::
+    :::warning
+    If you change root-site authentication mode after initial connector creation, you'll need to recreate the connector.
+    :::
 
-- Click **Authorize** and confirm success.
-
-<div className="flex justify-center">
-    <img className="w-[40%]" src={CopilotConnectorCreateGeneral}/>
-</div>
-
-- On **Users** tab, set access to **Everyone**.
-- On **Content** tab, add managed properties:
-
-<div className="flex justify-center">
-    <img className="w-[40%]" src={CopilotConnectorProperties}/>
-</div>
-
-| Property | Capabilities |
-|----------|---------------|
-| DocusaurOpsPageType | Query, Retrieve, Search |
-| DocusaurOpsProjectDescription | Query, Retrieve, Search |
-| DocusaurOpsProjectName | Query, Retrieve, Search |
-| DocusaurOpsProjectRepository | Query, Retrieve, Search |
-| DocusaurOpsProjectTechnologies | Query, Retrieve, Search |
-| DocusaurOpsProjectType | Query, Retrieve, Search |
-| DocusaurOpsSource | Query, Retrieve, Search |
-
-Create the connector.
-
-After craeted, edit the description with:
-"Connector indexing DocusaurOps-generated documentation sites and represent to the organization technical shared knowledge."
-
- **This description is used by the WorkIQ Copilot MCP to retreive correct content**.
-
-Expected result after a few minutes:
+    - Click **Authorize** and confirm success.
 
     <div className="flex justify-center">
-        <img className="w-[40%]" src={CopilotConnectorIndex}/>
+        <img className="w-[40%]" src={CopilotConnectorCreateGeneral}/>
     </div>
 
+2. On **Users** tab, set access to **Everyone**.
+3. On **Content** tab, add managed properties and select the site meta-tags:
 
-:::info
-Connector indexing uses root `sitemap.xml`. New sites are automatically discoverable when deployment updates root app setting `ENV_SITE_URLS`.
+    <div className="flex justify-center m-8">
+        <img className="w-[40%]" src={CopilotConnectorProperties}/>
+    </div>
 
-To validate indexed sites, open:
-`https://docusaurops-my-env.canadacentral.cloudapp.azure.com/sitemap.xml`
+    | Property | Capabilities |
+    |----------|---------------|
+    | DocusaurOpsPageType | Query, Retrieve, Search |
+    | DocusaurOpsProjectDescription | Query, Retrieve, Search |
+    | DocusaurOpsProjectName | Query, Retrieve, Search |
+    | DocusaurOpsProjectRepository | Query, Retrieve, Search |
+    | DocusaurOpsProjectTechnologies | Query, Retrieve, Search |
+    | DocusaurOpsProjectType | Query, Retrieve, Search |
+    | DocusaurOpsSource | Query, Retrieve, Search |
 
-If a newly deployed site is missing from sitemap, verify deploy-site script updates root app settings correctly.
-:::
+4. Create the connector.
+
+    After created, edit the connector description with:
+    
+    > "Connector indexing DocusaurOps-generated documentation sites and represent to the organization technical shared knowledge."
+
+    :::important
+    **This description is quite important as it is used by the WorkIQ to retrieve correct content**.
+    :::
+
+    Expected result after a few minutes:
+
+        <div className="flex justify-center m-8">
+            <img className="w-[40%]" src={CopilotConnectorIndex}/>
+        </div>
+
+    :::info
+    Connector indexing uses root `sitemap.xml`. New sites are automatically discoverable when deployment updates root app setting `ENV_SITE_URLS`.
+
+    To validate indexed sites, open:
+    `https://docusaurops-my-env.canadacentral.cloudapp.azure.com/sitemap.xml`
+
+    If a newly deployed site is missing from sitemap, verify deploy-site script updates root app settings correctly.
+    :::
 
 ## Step 9 - Validation checklist
 

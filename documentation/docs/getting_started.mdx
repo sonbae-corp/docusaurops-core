@@ -19,36 +19,45 @@ import NewProjectSite from './img/new_project_site.png';
 
 # Getting started with DocusaurOps plugin
 
-DocusaurOps is a GitHub Copilot plugin for GitHub Copilot in VSCode and CLI focused on documentation management for technical teams within an organization.
-It provides a set of agents and skills to help you in your documentation management across your organization's technical teams.
+<div className="not-prose mb-8 rounded-2xl border border-[rgba(32,201,151,0.35)] bg-[rgba(32,201,151,0.05)] px-6 py-6">
+  <p className="m-0 leading-relaxed text-[var(--ifm-font-color-base)]">
+    In this guide, you'll install the DocusaurOps plugin to your Copilot workspace and learn how to use powerful skills for documentation setup, knowledge discovery, and specification generation.
+  </p>
+  <p className="mt-3 mb-0 leading-relaxed text-[var(--ifm-font-color-secondary)] text-sm">
+    Estimated time: <strong>10 minutes</strong>
+  </p>
+</div>
 
 ## Prerequisites
-Here are the prerequisites you'll need to use the DocusaurOps plugin:
 
-- DocusaurOps infrastructre [deployed](./deployment.mdx) and up and running.
+Make sure you have all of these before getting started:
+
+- DocusaurOps infrastructure [deployed](./deployment.mdx) and up and running
 - [GitHub Copilot license](https://github.com/features/copilot/plans)
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Git](https://git-scm.com/)
 - [GitHub CLI](https://cli.github.com/)
 - [GitHub Copilot CLI](https://github.com/features/copilot/cli)
 
-### Install from marketplace
+## Step 1: Install the plugin
 
 <Tabs defaultValue="cli" values={[
 { label: 'Copilot CLI', value: 'cli' },
-{ label: 'Copilot VS Code', value: 'vscode' },
+{ label: 'Copilot in VS Code', value: 'vscode' },
 ]}>
 <TabItem value="cli">
 
-1. Add your GitHub marketplace (see [deployment guide](./deployment.mdx#step-1---create-required-github-repositories) for details on how to set up one):
+**On your terminal:**
+
+1. Add your GitHub marketplace:
 
 ```bash
 copilot plugin marketplace add your-org/docusaurops-core
 ```
 
-    <div className="flex justify-center mb-10">
-        <img className="w-[80%]" src={CopilotCLIMarketplace}/>
-    </div>
+<div className="flex justify-center my-6">
+    <img className="w-[80%]" src={CopilotCLIMarketplace}/>
+</div>
 
 2. Install the plugin:
 
@@ -56,106 +65,134 @@ copilot plugin marketplace add your-org/docusaurops-core
 copilot plugin install docusaurops@docusaurops-plugins
 ```
 
-    <div className="flex justify-center mb-10">
-        <img className="w-[80%]" src={CopilotCLIPluginInstall}/>
-    </div>
+<div className="flex justify-center my-6">
+    <img className="w-[80%]" src={CopilotCLIPluginInstall}/>
+</div>
 
 </TabItem>
 <TabItem value="vscode">
 
-1. Open VS Code settings (`Ctrl+,`), search `chat.plugins.marketplaces`, and add `your-org/docusaurops-core`:
+**In Visual Studio Code:**
 
-    <div className="flex justify-center mb-10">
-        <img className="w-[50%]" src={VSCodePluginMarketplace}/>
-    </div>
+1. Open settings with `Ctrl+,`, search for `chat.plugins.marketplaces`, and add `your-org/docusaurops-core`:
 
-2. In VS Code Extensions, search `@agentPlugins docusaurops` and install `docusaurops-plugin`:
+<div className="flex justify-center my-6">
+    <img className="w-[60%]" src={VSCodePluginMarketplace}/>
+</div>
 
-    <div className="flex justify-center mb-10">
-        <img className="w-[50%]" src={VSCodeInstallPlugin}/>
-    </div>
+2. Open the Extensions panel, search `@agentPlugins docusaurops`, and click **Install**:
+
+<div className="flex justify-center my-6">
+    <img className="w-[60%]" src={VSCodeInstallPlugin}/>
+</div>
 
 </TabItem>
 </Tabs>
 
-### Validate plugin and use the agent
+## Step 2: Launch the agent
 
 <Tabs defaultValue="cli" values={[
 { label: 'Copilot CLI', value: 'cli' },
-{ label: 'Copilot VS Code', value: 'vscode' },
+{ label: 'Copilot in VS Code', value: 'vscode' },
 ]}>
 <TabItem value="cli">
 
-1. Start Copilot CLI:
+**Start the CLI and select DocusaurOps:**
+
+1. Launch Copilot CLI:
 
 ```bash
 copilot
 ```
 
-2. Select the agent "DocusaurOps Agent":
+2. Select the agent:
 
 ```bash
 /agent
 ```
 
-    <div className="flex justify-center mb-10">
-        <img className="w-[80%]" src={CLISelectAgent}/>
-    </div>
+Then choose **DocusaurOps Agent**:
 
-4. Select a model:
+<div className="flex justify-center my-6">
+    <img className="w-[80%]" src={CLISelectAgent}/>
+</div>
+
+3. Pick your AI model (optional but recommended):
 
 ```bash
 /model claude-sonnet-4.6
 ```
 
-:::info
-We recommend **Claude Sonnet 4.6** for best results, but you can use any available model.
+:::tip Model Choice
+We recommend **Claude Sonnet 4.6** for best results, but any available model works fine.
 :::
 
 </TabItem>
 <TabItem value="vscode">
 
-1. Open a new Copilot chat and confirm the DocusaurOps agent is available:
+**Start a chat and confirm the agent is loaded:**
 
-    <div className="flex justify-center">
-        <img className="w-[40%]" src={AgentChatVsCode}/>
-    </div>
+1. Open a new Copilot Chat window (`Ctrl+L` or via the Chat icon)
+
+2. You should see the **DocusaurOps Agent** available:
+
+<div className="flex justify-center my-6">
+    <img className="w-[50%]" src={AgentChatVsCode}/>
+</div>
+
+3. Click on it or mention `@docusaurops` in your prompt and you're ready to go!
 
 </TabItem>
 </Tabs>
 
 ---
 
-## Use the agent
+## What the agent can do for you
 
-The **DocusaurOps Agent** is designed to assist you in creating and managing your documentation in your projects. To achieve this, it multiple following skills available:
+Once installed, the **DocusaurOps Agent** provides three powerful skills to manage your documentation:
 
-#### `docs-setup`
+<div className="not-prose grid grid-cols-1 lg:grid-cols-3 gap-4 my-8">
+  <div className="rounded-xl border border-[rgba(32,201,151,0.35)] bg-[rgba(32,201,151,0.08)] p-4">
+    <p className="font-bold text-[var(--ifm-color-primary)] mb-2">docs-setup</p>
+    <p className="text-sm text-[var(--ifm-font-color-secondary)] mb-0">Create or upgrade documentation sites with one command</p>
+  </div>
+  <div className="rounded-xl border border-[rgba(91,141,255,0.30)] bg-[rgba(91,141,255,0.08)] p-4">
+    <p className="font-bold text-[var(--ifm-color-primary)] mb-2">docs-ask</p>
+    <p className="text-sm text-[var(--ifm-font-color-secondary)] mb-0">Search across all docs in your organization</p>
+  </div>
+  <div className="rounded-xl border border-[rgba(183,241,221,0.28)] bg-[rgba(183,241,221,0.08)] p-4">
+    <p className="font-bold text-[var(--ifm-color-primary)] mb-2">docs-specs</p>
+    <p className="text-sm text-[var(--ifm-font-color-secondary)] mb-0">Convert requirements to technical specs</p>
+  </div>
+</div>
 
-Sets up a new documentation site by cloning the latest template from a dedicated repository, customizing it with your information, and configuring CI/CD pipelines to deploy your site on Azure. Also handles upgrading an existing documentation site to the latest template.
+---
 
-The site is published under a well known URL and then indexed through a Copilot connector (ex: `https://<my-site>.<location>.cloudapp.azure.com/`).
+### Create & Deploy Documentation Sites
 
-To use it, simply ask the following:
+**docs-setup** scaffolds a complete documentation site, deploys it to Azure, and sets up automated CI/CD — all from a single prompt.
 
-> Setup a new documentation site for the current project:
+<div className="flex justify-center my-6">
+  <div style={{ width: '100%', maxWidth: '560px', aspectRatio: '16/9' }}>
+    <iframe src="https://www.youtube.com/embed/rcS7U7C5ufg" style={{width: '100%', height: '100%'}} allow="autoplay; encrypted-media" allowFullScreen />
+  </div>
+</div>
 
-You: "Setup a documentation site for project "HR Smart Assistant" with url 'hr-smart-assistant'
+**Try this simple prompt:**
 
-> Create a site with demo content and authentication enabled:
+```
+Setup a documentation site for project "HR Smart Assistant" with url "hr-smart-assistant"
+```
 
-You: "Setup a documentation site for project "HR Smart Assistant" with url 'hr-smart-assistant'. Use demo content and enable authentication".
+**What happens automatically:**
+- ✓ Downloads the latest template
+- ✓ Customizes with your information
+- ✓ Creates the documentation structure
+- ✓ Deploys to Azure
+- ✓ Sets up CI/CD pipeline
+- ✓ Runs locally for you to test
 
-`copilot --model claude-sonnet-4.6 --agent docusaurops:docusaurops --prompt "Setup a documentation site for project 'HR Smart Assistant' with url 'hr-smart-assistant'. Use demo content and enable authentication" --allow-all`
-
-> Only `site_title` and `site_slug` are required.
-
-**What happens at a high level:**
-1. Downloads the latest DocusaurOps documentation template using your GitHub credentials (using `gh auth token`).
-2. Fills in the provided information and prompts you to confirm or supply missing details.
-3. Merges the template with your existing documentation, or creates the documentation structure if it doesn't exist.
-4. Create demo content if requested.
-5. Runs the documentation site locally.
+After setup, your site will be live at: `https://<my-site>.<location>.cloudapp.azure.com/hr-smart-assistant`
 
 After setup, the new site is deployed under the root website with the URL specified ex:( `https://<my-site>.<location>.cloudapp.azure.com/hr-smart-assistant`):
 
@@ -163,32 +200,71 @@ After setup, the new site is deployed under the root website with the URL specif
     <img className="w-[80%]" src={NewProjectSite}/>
 </div>
 
-When you'll commit and psuh to your repository, the documentation site will be automatically deployed to Azure through GitHub Actions, without requiring any setup on your repo.
-
-INSERT_VIDEO_DEMO_HERE
+When you'll commit and push to your repository, the documentation site will be automatically deployed to Azure through GitHub Actions, without requiring any setup on your repo.
 
 ---
 
-#### `docs-ask`
+### Search Across All Your Documentation
 
-Asks questions about the content of all DocusaurOps sites using leveraging WorkIQ CLI MCP. Returns an answer based on relevant content found across all indexed sites.
+**docs-ask** lets you query your entire organization's documentation at once through natural language, finding answers across all indexed sites.
 
-**Usage:**
+<div className="flex justify-center my-6">
+  <div style={{ width: '100%', maxWidth: '560px', aspectRatio: '16/9' }}>
+    <iframe src="https://www.youtube.com/embed/xGUISHrJpyo" style={{width: '100%', height: '100%'}} allow="autoplay; encrypted-media" allowFullScreen />
+  </div>
+</div>
 
-> Ask about a specific project:
+**Try these prompts:**
 
-You: "Where is the documentation about project X?"
-You: "Explain the architecture on project Y based on the available documentation."
+**Find info about a specific project:**
+```
+Where is the documentation about project X?
+```
 
-> Ask about a specific topic across all projects:
+**Find examples across your organization:**
+```
+Find me examples where we implemented feature XYZ and explain the architecture
+```
 
-You: "Find me examples where we implemented a the feature XYZ and explain the architecture we used.""
-You: "What projects are using these technologies already?" 
-You: "Find guidance on how to setup feature XYZ"
+**Get guidance on practices:**
+```
+What are the best practices for setting up authentication in microservices?
+```
 
-INSERT_VIDEO_DEMO_HERE
+---
 
-#### `docs-specs`
+### Generate Specs from Requirements
 
-TODO
+**docs-specs** converts requirement documents into technical specifications and automatically creates GitHub issues for implementation.
 
+<div className="flex justify-center my-6">
+  <div style={{ width: '100%', maxWidth: '560px', aspectRatio: '16/9' }}>
+    <iframe src="https://www.youtube.com/embed/cUkXb5Wmd3o" style={{width: '100%', height: '100%'}} allow="autoplay; encrypted-media" allowFullScreen />
+  </div>
+</div>
+
+**Try this prompt:**
+
+**Convert a requirement document:**
+```
+Generate technical specifications from this requirement document [link to SharePoint or OneDrive file]
+```
+
+The agent will:
+- ✓ Read the requirement document
+- ✓ Generate technical specifications
+- ✓ Create GitHub issues for your team
+- ✓ Structure work for implementation
+
+---
+
+## You're All Set!
+
+<div className="not-prose rounded-2xl border border-[rgba(32,201,151,0.35)] bg-[rgba(32,201,151,0.08)] px-6 py-6 my-8">
+  <h3 className="mt-0">Next Steps</h3>
+  <div className="space-y-3 text-sm text-[var(--ifm-font-color-secondary)]">
+    <p><strong>Start now:</strong> Open Copilot (VS Code or CLI) and try: <code className="text-xs bg-[rgba(2,8,22,0.5)] px-1">"Setup documentation for my project"</code></p>
+    <p><strong>Learn more:</strong> Check the [deployment guide](./deployment.mdx) to understand the infrastructure</p>
+    <p><strong>Get help:</strong> Ask the DocusaurOps agent anything about your documentation workflow</p>
+  </div>
+</div>
